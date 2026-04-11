@@ -1,7 +1,7 @@
 # Softtek Java/Angular AI
 Curso de desarrollo con IA para Softtek usando Java y Angular
 
-[Repositorio del curso](https://github.com/AlbertoBasaloAcademy/icp-java_ng-ai)
+[Repositorio del curso](https://github.com/TrainingITCourses/softtek-java_ng-ai)
 
 ---
 
