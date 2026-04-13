@@ -1,0 +1,6 @@
+/temp
+# Angular at frontend
+/front/node_modules
+# Java at backend
+/back/target
+/back/.mvn
