@@ -1,31 +1,31 @@
-# AstroBookings 
+# AstroBookings Español
 
-A system comprising a **backend API** and a **frontend WebApp** designed for managing space travel bookings.
+Sistema compuesto por una **API backend** y una **WebApp frontend** orientado a la gestión de reservas para viajes espaciales.
 
-- Rockets have limited seat capacity and a specific operational range.
-- Launches are scheduled by associating them with a rocket on a future date.
-- Each launch sets a price per seat and a minimum required occupancy threshold.
-- The lifecycle of a launch contemplates the sequential states: `scheduled` → `confirmed` → `successful`.
-- A launch can transition to `suspended` due to low occupancy or `canceled` due to technical causes.
-- Users (identified as operators or passengers) register using their email address and name.
-- Operators manage the registry of rockets and launches, including handling cancellations and suspensions.
-- Passengers can formalize personal bookings for launches with available seats.
-- Payments and refunds (resulting from a suspension or cancellation) are processed through a mock transactional gateway.
+- Los cohetes disponen de capacidad de asientos limitada y un rango operativo específico.
+- Los lanzamientos se programan asociándolos a un cohete en una fecha futura.
+- Cada lanzamiento establece un precio por asiento y un umbral mínimo de ocupación requerida.
+- El ciclo de vida de un lanzamiento contempla los estados secuenciales: `programado` → `confirmado` → `exitoso`.
+- Un lanzamiento puede transicionar a `suspendido` por baja ocupación o a `cancelado` por causas técnicas.
+- Los usuarios (identificados como operadores o pasajeros) se registran mediante su correo electrónico y nombre.
+- Los operadores administran el registro de cohetes y lanzamientos, incluyendo la gestión de cancelaciones y suspensiones.
+- Los pasajeros pueden formalizar reservas personales en lanzamientos con plazas disponibles.
+- Los cobros y reembolsos (derivados de una suspensión o cancelación) se procesan a través de una pasarela transaccional simulada.
 
 > [!WARNING]
-> AstroBookings is a fictional space travel company.
-> The system is designed for demonstration and training purposes. 
-> Not for production use; 
-> No security or database is required at the initial stage.
+> AstroBookings es una empresa ficticia de viajes espaciales.
+> El sistema está diseñado con fines de demostración y formación. 
+> No está pensado para uso en producción.
+> No se requiere seguridad ni base de datos en la fase inicial.
 
 ---
 
-- [Repository at GitHub](https://github.com/AlbertoBasaloLabs/astro-bookings)
-- Default branch: `main`
+- [Repositorio en GitHub](https://github.com/AlbertoBasaloLabs/astro-bookings)
+- Rama por defecto: `main`
 
-- **Author**: [Alberto Basalo](https://albertobasalo.dev)
+- **Autor**: [Alberto Basalo](https://albertobasalo.dev)
 - **Ai Code Academy en Español**: [AI code Academy](https://aicode.academy)
-- **Socials**:
+- **Redes sociales**:
   - [X](https://x.com/albertobasalo)
   - [LinkedIn](https://www.linkedin.com/in/albertobasalo/)
   - [GitHub](https://github.com/albertobasalo)
