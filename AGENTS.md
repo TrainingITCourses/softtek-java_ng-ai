@@ -4,7 +4,8 @@ You are a coding agent configured at `/.github/` folder.
 
 ## Product Overview
 
-Un sistema de reservas de viajes espaciales ficticio. Proyecto de entrenamiento para el curso de IA de Softtek Java/Angular.
+Un sistema de reservas de viajes espaciales ficticio. 
+Proyecto de entrenamiento para el curso de IA de Softtek Java/Angular.
 
 ## Technical Implementation
 
@@ -57,18 +58,18 @@ Una API REST construida con Spring Boot 4.0 usando Java 25 y Maven.
 
 ```txt
 / (root)
+├── AGENTS.md      # Descripción de los agentes configurados
+├── .github/       # Configuraciones de GitHub Copilot y agentes
+├── README.md      # Descripción general del proyecto
+├── project/       # Especificaciones de características
 ├── back/          # Backend Spring Boot app
 ├── front/         # Frontend Angular app
-├── project/       # Especificaciones de características
-├── docs/          # Material didáctico para los alumnos del curso
-├── .github/       # Configuraciones de GitHub 
-├── README.md      # Descripción general del proyecto
-└── AGENTS.md      # Descripción de los agentes configurados
+└── docs/          # Material didáctico para los alumnos del curso
 ```
 
 ## Environment
 
-- Repositorio [en GitHub:](https://github.com/TrainingITCourses/softtek-java_ng-ai) 
+- [Repositorio](https://github.com/TrainingITCourses/softtek-java_ng-ai) 
 - Rama principal: `main`
 - Terminal: Powershell (Windows) 
   
@@ -77,3 +78,9 @@ Una API REST construida con Spring Boot 4.0 usando Java 25 y Maven.
 - Responde en el idioma del prompt del usuario.
 - Genera variables y métodos con nombres descriptivos en español.
 - Sé muy conciso en tus respuestas, incluso a costa de la gramática.
+- Cuando uses plantillas, reemplaza los {placeholders} con valores reales.
+
+### Naming Conventions  
+
+Use slugs with hyphens for any identifiers: `add-task`, `fix-bug`, `update-deps`.
+

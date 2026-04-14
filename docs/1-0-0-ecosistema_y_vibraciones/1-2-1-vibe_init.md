@@ -1,4 +1,4 @@
 # Vibe health check
 
-- Conversación para crear mensjae de bienvenida y salud del sistema.
+- Conversación para crear mensaje de bienvenida y salud del sistema.
 
