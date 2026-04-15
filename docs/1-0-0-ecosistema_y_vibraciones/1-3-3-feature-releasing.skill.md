@@ -19,8 +19,8 @@ This skill ensures that the feature is properly tested, documented, and released
 
 ## 3. Git release
 
-- Ensure all changes are committed with clear and descriptive messages.
 - Change any version numbers in the codebase to reflect the new release version.
+- Ensure all changes are committed with clear and descriptive messages.
 - Create a Git Tag for the new release following semantic versioning.
 - Merge the feature branch into the main branch if not already done.
 - Push the changes and the new tag to the remote repository.
