@@ -17,17 +17,17 @@ If not, do it for the last modified file in the git history.
 
 ## Steps to follow:
 
-1. **Commit existing changes**:
+### 1. Commit existing changes:
   - Commit any existing changes in the codebase before starting new work.
-2. **Analyze the code**:
+### 2. Analyze the code:
   - Read the code at the specified file or folder.
-3. **Identify improvements**:
+### 3. Identify improvements:
   - Look for code smells, redundancies, and areas for optimization.
-4. **Plan the cleaning**:
+### 4. Plan the cleaning:
   - Outline the steps to clean the code effectively.
-5. **Execute the cleaning**:
+### 5. Execute the cleaning:
   - Apply the planned changes to clean the code.
-6. **Test the cleaned code**:
+### 6. Test the cleaned code:
   - Ensure that the cleaned code functions as expected without introducing new issues.
 
 ## Output checklist:

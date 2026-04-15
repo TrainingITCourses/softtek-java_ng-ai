@@ -9,12 +9,14 @@ description : >
 
 When asked for committing changes, follow these steps:
 
-1. **Check for uncommitted changes**:
+## Steps to Commit Changes
+
+### 1. Check for uncommitted changes:
   - Use `git status` to see if there are any uncommitted changes.
-2. **Group changes**:
+### 2. Group changes:
   - If there are multiple files changed, group them logically if possible.
-  - Fore each group do the next two steps:
-3. **Stage grouped changes**:
+  - For each group do the next two steps:
+### 3. Stage grouped changes:
   - Stage the changes using `git add` for each group of files.
-4. **Commit grouped changes**:
+### 4. Commit grouped changes:
   - Commit the staged changes using meaningful [conventional commit messages](conventional-commits.md).
