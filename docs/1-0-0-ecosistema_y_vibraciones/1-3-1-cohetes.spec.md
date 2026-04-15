@@ -17,44 +17,46 @@ El personal administrativo necesita una herramienta para registrar y mantener el
 
 ## Boceto de la solución
 
-Una interfaz y API para la gestión simple para consultar e introducir los vehículos de la flota, manteniendo almacenado el nombre, capacidad y rango de cada cohete.
+Una interfaz web y un API RESTful para la gestión de cohetes. MVP para consultar e introducir los vehículos de la flota, manteniendo almacenado el nombre, capacidad y rango de cada cohete.
 
 ### Modelo
 
 | Entidad | Atributo | Tipo | Restricciones |
-|--------|----------|-------------|-------------|
-| `Cohete` | `id` | `uuid#` | Autogenerado, único |
-| `Cohete` | `nombre` | `string#` | min 3, max 100 caracteres |
-| `Cohete` | `capacidad` | `integer` | min 1, max 10 |
-| `Cohete` | `rango` | `enum` | Valores: Tierra, Luna, Marte |
+|---------|----------|------|---------------|
+| `Cohete` | `id` | `uuid#` | Autogenerado |
+| `Cohete` | `nombre` | `string#` | [3..10] chars |
+| `Cohete` | `capacidad` | `integer` | [1..9] value |
+| `Cohete` | `rango` | `enum` | ['Tierra', 'Luna', 'Marte'] |
 
-> leyenda: `#` para único, `?` para opcional (requrido por defecto)
+> leyenda: `#` para único, `?` para opcional (requerido por defecto)
 
 ### Back
 
-- Recepción de peticiones, validación del payload y persistencia de cohetes (creación y actualización).
-- Devolución en formato JSON de la lista de todos los cohetes activos del sistema.
-- Validación de que el rango sea un valor del enumerado admitido.
+- Recepción de peticiones, validación del payload y persistencia de cohetes.
+- Devolución en formato JSON del resultado de cada operación.
 - Implementación de borrado lógico (soft delete) para dar de baja los cohetes.
-- No debe permitirse la creación o modificación de cohetes resultando en un nombre duplicado.
+- Sin control de acceso ni firma de operaciones.
 
 ### Front
 
-- Mostrar una pantalla específica de gestión de flota de cohetes con un listado/tabla de resumen.
-- Disponer de un formulario para el alta de nuevos cohetes, aplicando validaciones previas al envío de datos.
-- Permitir el acceso y gestión a cualquier usuario sin restricciones de rol u operativas en esta fase.
-- Opcionalmente mostrar mensajes o alertas de éxito tras la creación.
+- Mostrar en pantalla inicial un listado de los cohetes activos.
+- Disponer de un formulario para el alta de nuevos cohetes.
+- Aplicar validaciones previas al envío de datos.
+- Pantalla para la edición o borrado de un cohete existente.
+- Mostrar resultado correcto o de error de cada operación al usuario.
+- Sin control de acceso ni autenticación de usuarios.
 
 ### Contract
 
 | Método | Endpoint | Success | Error |
 |--------|----------|---------|-------|
-| `GET` | `/api/rockets` | `200` | `500` |
-| `POST` | `/api/rockets` | `201` | `400, 409` |
-| `PUT` | `/api/rockets/:id` | `200` | `400, 404, 409` |
-| `DELETE` | `/api/rockets/:id` | `204` | `404` |
+| `GET` | `/api/cohetes` | `200` | `500` |
+| `GET` | `/api/cohetes/:id` | `200` | `404, 500` |
+| `POST` | `/api/cohetes` | `201` | `400, 409` |
+| `PUT` | `/api/cohetes/:id` | `200` | `400, 404, 409` |
+| `DELETE` | `/api/cohetes/:id` | `204` | `404` |
 
-**Request — `CreateRocket` / `UpdateRocket`**
+**Request — `CreateCohete` / `UpdateCohete`**
 
 ```json
 {
@@ -64,7 +66,7 @@ Una interfaz y API para la gestión simple para consultar e introducir los vehí
 }
 ```
 
-**Response — `Rocket`**
+**Response — `Cohete`**
 
 ```json
 {
@@ -102,6 +104,7 @@ Una interfaz y API para la gestión simple para consultar e introducir los vehí
 
 - Eliminación física de registros en base de datos (se debe conservar de forma perpetua el histórico).
 - Asignación de cohetes a lanzamientos (pertenece a la funcionalidad específica de vuelos).
+- Seguridad, autenticación o control de acceso a la gestión de cohetes (se asume que solo personal autorizado tendrá acceso a esta funcionalidad).
 
 ---
 

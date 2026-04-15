@@ -12,8 +12,5 @@ Write unit test for logic and data validation.
 
 Do not write documentation, just the functional code with unit tests.
 
+Do not write e2e or integration tests, only unit tests.
 
-## Output checklist
-
-- [ ] A new branch named `feat-cohetes` with the implementation.
-- [ ] Modified or newly created code files 

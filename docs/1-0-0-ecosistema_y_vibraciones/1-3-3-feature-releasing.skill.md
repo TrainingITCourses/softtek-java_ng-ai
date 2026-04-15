@@ -7,9 +7,9 @@ This skill ensures that the feature is properly tested, documented, and released
 
 ## 1. Verify Implementation
 
-- Write e2e tests based on acceptance criteria defined in the spec file.
-- Run the tests to ensure they pass successfully.
-- Mark the checklist of acceptance criteria in the spec file as completed.
+- Run the application e2e.
+- Perform manual testing using your browser tool.
+- Mark the checklist of acceptance criteria that have been met.
   
 ## 2. Update Documentation
 

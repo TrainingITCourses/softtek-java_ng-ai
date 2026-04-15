@@ -11,18 +11,18 @@
 
 ## Boceto de la solución
 
-Una interfaz web y un API RESTful para la gestión simple para consultar e introducir los vehículos de la flota, manteniendo almacenado el nombre, capacidad y rango de cada cohete.
+Una interfaz web y un API RESTful para la gestión de cohetes. MVP para consultar e introducir los vehículos de la flota, manteniendo almacenado el nombre, capacidad y rango de cada cohete.
 
 ### Modelo
 
 | Entidad | Atributo | Tipo | Restricciones |
-|--------|----------|-------------|-------------|
-| `Cohete` | `id` | `uuid#` | Autogenerado, único |
-| `Cohete` | `nombre` | `string#` | min 3, max 100 caracteres |
-| `Cohete` | `capacidad` | `integer` | min 1, max 10 |
-| `Cohete` | `rango` | `enum` | Valores: Tierra, Luna, Marte |
+|---------|----------|------|---------------|
+| `Cohete` | `id` | `uuid#` | Autogenerado |
+| `Cohete` | `nombre` | `string#` | [3..10] chars |
+| `Cohete` | `capacidad` | `integer` | [1..9] value |
+| `Cohete` | `rango` | `enum` | ['Tierra', 'Luna', 'Marte'] |
 
-> leyenda: `#` para único, `?` para opcional (requrido por defecto)
+> leyenda: `#` para único, `?` para opcional (requerido por defecto)
 
 ---
 
