@@ -8,7 +8,7 @@ import {
     signal,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Cohete, CohetePeticion, RANGOS } from '../cohete.model';
+import { Cohete, CohetePeticion, Rango, RANGOS } from '../cohete.model';
 
 @Component({
   selector: 'app-cohete-form',
@@ -92,6 +92,6 @@ export class CoheteFormComponent implements OnInit {
   protected enviar(): void {
     if (this.formulario.invalid) return;
     const { nombre, capacidad, rango } = this.formulario.getRawValue();
-    this.guardado.emit({ nombre: nombre!, capacidad: capacidad!, rango: rango as CohetePeticion['rango'] });
+    this.guardado.emit({ nombre: nombre!, capacidad: capacidad!, rango: rango as Rango });
   }
 }

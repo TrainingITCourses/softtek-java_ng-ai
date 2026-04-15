@@ -4,7 +4,7 @@ import {
     inject,
     OnInit,
     signal,
-    ViewChild,
+    viewChild,
 } from '@angular/core';
 import { CoheteFormComponent } from '../cohete-form/cohete-form.component';
 import { Cohete, CohetePeticion } from '../cohete.model';
@@ -18,8 +18,8 @@ import { CohetesService } from '../cohetes.service';
     <main>
       <h1>Cohetes</h1>
 
-      @if (mensaje()) {
-        <p role="status" [class]="mensajeError() ? 'error' : 'exito'">{{ mensaje() }}</p>
+      @if (aviso(); as a) {
+        <p role="status" [class]="a.esError ? 'error' : 'exito'">{{ a.texto }}</p>
       }
 
       @if (mostrarFormulario()) {
@@ -62,16 +62,17 @@ import { CohetesService } from '../cohetes.service';
     </main>
   `,
 })
+type Aviso = { texto: string; esError: boolean };
+
 export class CohetesComponent implements OnInit {
-  @ViewChild('formRef') formRef?: CoheteFormComponent;
+  private readonly formRef = viewChild<CoheteFormComponent>('formRef');
 
   private readonly servicio = inject(CohetesService);
 
   protected readonly cohetes = signal<Cohete[]>([]);
   protected readonly mostrarFormulario = signal(false);
   protected readonly coheteSeleccionado = signal<Cohete | null>(null);
-  protected readonly mensaje = signal<string | null>(null);
-  protected readonly mensajeError = signal(false);
+  protected readonly aviso = signal<Aviso | null>(null);
 
   ngOnInit(): void {
     this.cargarCohetes();
@@ -115,7 +116,7 @@ export class CohetesComponent implements OnInit {
       },
       error: (err) => {
         const mensajeError = err?.error?.message ?? 'Error al guardar el cohete';
-        this.formRef?.setErrorServidor(mensajeError);
+        this.formRef()?.setErrorServidor(mensajeError);
       },
     });
   }
@@ -131,12 +132,10 @@ export class CohetesComponent implements OnInit {
   }
 
   private mostrarMensaje(texto: string, esError: boolean): void {
-    this.mensaje.set(texto);
-    this.mensajeError.set(esError);
+    this.aviso.set({ texto, esError });
   }
 
   private limpiarMensaje(): void {
-    this.mensaje.set(null);
-    this.mensajeError.set(false);
+    this.aviso.set(null);
   }
 }
