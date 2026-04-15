@@ -66,9 +66,20 @@ Una API REST construida con Spring Boot 4.0 usando Java 25 y Maven.
 ├── README.md      # Descripción general del proyecto
 ├── project/       # Especificaciones de características
 ├── back/          # Backend Spring Boot app
+│   └── src/main/java/.../cohetes/   # Gestión de cohetes: Cohete, CoheteService, CoheteController, CoheteRepository
 ├── front/         # Frontend Angular app
+│   └── src/app/cohetes/             # Gestión de cohetes: CohetesService, CohetesComponent, CoheteFormComponent
 └── docs/          # Material didáctico para los alumnos del curso
 ```
+
+## Features implementadas
+
+### F1 — Gestión de Cohetes (`v1.0.0`)
+- API REST CRUD en `/api/cohetes` (GET, POST, PUT, DELETE)
+- Soft delete (borrado lógico con campo `activo`)
+- Validaciones: nombre [3..10] chars, capacidad [1..9], rango enum {Tierra, Luna, Marte}
+- Errores estructurados: `{ code, error, message }`
+- Frontend Angular: listado, formulario reactivo de alta/edición, baja con feedback al usuario
 
 ## Environment
 
