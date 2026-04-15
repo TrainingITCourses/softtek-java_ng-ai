@@ -91,12 +91,12 @@ Una interfaz web y un API RESTful para la gestión de cohetes. MVP para consulta
 
 ## Criterios de aceptación
 
-- [ ] el sistema DEBE requerir nombre, capacidad de asientos y un rango válido (Tierra, Luna, Marte) para cada cohete
-- [ ] CUANDO un usuario envía datos válidos para un cohete el sistema DEBE registrar el vehículo, asignarle un id único y hacerlo disponible en el sistema
-- [ ] CUANDO un usuario modifica un cohete existente el sistema DEBE actualizar sus datos asegurando mantener la unicidad del nombre
-- [ ] CUANDO un usuario da de baja un cohete el sistema DEBE marcarlo como inactivo (borrado lógico) sin eliminar el registro físico
-- [ ] SI un usuario intenta asignar un rango no permitido ENTONCES el sistema DEBE rechazar la operación con un error de validación
-- [ ] SI un usuario intenta asignar una capacidad no permitida ENTONCES el sistema DEBE rechazar la operación con un error de validación
+- [x] el sistema DEBE requerir nombre, capacidad de asientos y un rango válido (Tierra, Luna, Marte) para cada cohete
+- [x] CUANDO un usuario envía datos válidos para un cohete el sistema DEBE registrar el vehículo, asignarle un id único y hacerlo disponible en el sistema
+- [x] CUANDO un usuario modifica un cohete existente el sistema DEBE actualizar sus datos asegurando mantener la unicidad del nombre
+- [x] CUANDO un usuario da de baja un cohete el sistema DEBE marcarlo como inactivo (borrado lógico) sin eliminar el registro físico
+- [x] SI un usuario intenta asignar un rango no permitido ENTONCES el sistema DEBE rechazar la operación con un error de validación
+- [x] SI un usuario intenta asignar una capacidad no permitida ENTONCES el sistema DEBE rechazar la operación con un error de validación
 
 ---
 

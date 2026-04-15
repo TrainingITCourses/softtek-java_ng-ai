@@ -1,14 +1,14 @@
 import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  OnInit,
-  signal,
-  ViewChild,
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    OnInit,
+    signal,
+    ViewChild,
 } from '@angular/core';
+import { CoheteFormComponent } from '../cohete-form/cohete-form.component';
 import { Cohete, CohetePeticion } from '../cohete.model';
 import { CohetesService } from '../cohetes.service';
-import { CoheteFormComponent } from '../cohete-form/cohete-form.component';
 
 @Component({
   selector: 'app-cohetes',

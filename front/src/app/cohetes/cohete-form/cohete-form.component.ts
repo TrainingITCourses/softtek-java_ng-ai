@@ -1,11 +1,11 @@
 import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-  OnInit,
-  output,
-  signal,
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    input,
+    OnInit,
+    output,
+    signal,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Cohete, CohetePeticion, RANGOS } from '../cohete.model';
