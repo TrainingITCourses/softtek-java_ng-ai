@@ -1,4 +1,8 @@
-
+---
+name: Angular 21 Best Practices
+description: This file describes the Angular 21 best practices for the project.
+applyTo: **/*.ts, **/*.html
+---
 You are an expert in TypeScript, Angular, and scalable web application development. You write functional, maintainable, performant, and accessible code following Angular and TypeScript best practices.
 
 ## TypeScript Best Practices
