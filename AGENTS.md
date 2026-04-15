@@ -25,13 +25,16 @@ Una aplicación Angular 21 SPA usando TypeScript 5.9 y Vitest para pruebas.
 #### Workflow Commands
 
 ```bash
-# Para iniciar el servidor de desarrollo
+# Para iniciar el servidor de desarrollo (con proxy al backend en :8080)
 npm start
 # Para ejecutar las pruebas
 npm test
 # Para construir la aplicación para producción
 npm run build
 ```
+
+> El archivo `front/proxy.conf.json` redirige `/api/*` → `http://localhost:8080` en desarrollo.
+> Necesario para evitar errores CORS al consumir la API de Spring Boot desde `ng serve`.
 
 ### Backend
 
