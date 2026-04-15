@@ -61,15 +61,15 @@ Una API REST construida con Spring Boot 4.0 usando Java 25 y Maven.
 
 ```txt
 / (root)
-├── AGENTS.md      # Descripción de los agentes configurados
-├── .github/       # Configuraciones de GitHub Copilot y agentes
-├── README.md      # Descripción general del proyecto
-├── project/       # Especificaciones de características
-├── back/          # Backend Spring Boot app
-│   └── src/main/java/.../cohetes/   # Gestión de cohetes: Cohete, CoheteService, CoheteController, CoheteRepository
-├── front/         # Frontend Angular app
-│   └── src/app/cohetes/             # Gestión de cohetes: CohetesService, CohetesComponent, CoheteFormComponent
-└── docs/          # Material didáctico para los alumnos del curso
+├── AGENTS.md             # Descripción de los agentes configurados
+├── .github/              # Configuraciones de GitHub Copilot y agentes
+├── README.md             # Descripción general del proyecto
+├── project/              # Especificaciones de características
+├── back/                 # Backend Spring Boot app
+│   └── .../cohetes/      # Gestión de cohetes: Cohete, CoheteService, CoheteController, CoheteRepository
+├── front/                # Frontend Angular app
+│   └── .../cohetes/      # Gestión de cohetes: CohetesService, CohetesComponent, CoheteFormComponent
+└── docs/                 # Material didáctico para los alumnos del curso
 ```
 
 ## Features implementadas
