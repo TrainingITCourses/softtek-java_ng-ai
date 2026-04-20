@@ -1,0 +1,14 @@
+{
+  "name": "astro-bookings-e2e",
+  "version": "1.0.0",
+  "description": "Playwright E2E tests for AstroBookings (front + back)",
+  "scripts": {
+    "test": "playwright test",
+    "test:front": "playwright test --project=front",
+    "test:back": "playwright test --project=back",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.52.0"
+  }
+}
