@@ -69,6 +69,11 @@ Una API REST construida con Spring Boot 4.0 usando Java 25 y Maven.
 │   └── .../cohetes/      # Gestión de cohetes: Cohete, CoheteService, CoheteController, CoheteRepository
 ├── front/                # Frontend Angular app
 │   └── .../cohetes/      # Gestión de cohetes: CohetesService, CohetesComponent, CoheteFormComponent
+├── e2e/                  # Playwright E2E tests (front + back)
+│   ├── playwright.config.ts
+│   └── tests/
+│       ├── front/        # Tests del frontend (:4200)
+│       └── back/         # Tests del backend (:8080)
 └── docs/                 # Material didáctico para los alumnos del curso
 ```
 
@@ -80,6 +85,27 @@ Una API REST construida con Spring Boot 4.0 usando Java 25 y Maven.
 - Validaciones: nombre [3..10] chars, capacidad [1..9], rango enum {Tierra, Luna, Marte}
 - Errores estructurados: `{ code, error, message }`
 - Frontend Angular: listado, formulario reactivo de alta/edición, baja con feedback al usuario
+
+### E2E Testing
+
+Pruebas de extremo a extremo con Playwright, organizadas por proyecto (`front` / `back`).
+
+#### Workflow Commands
+
+```bash
+# Instalar Playwright (solo la primera vez)
+cd e2e && npm install && npx playwright install --with-deps
+# Ejecutar todos los tests E2E
+npm test
+# Ejecutar solo tests del frontend
+npm run test:front
+# Ejecutar solo tests del backend
+npm run test:back
+# Ver reporte HTML
+npm run report
+```
+
+> Requiere que front (`:4200`) y back (`:8080`) estén arrancados previamente.
 
 ## Environment
 
