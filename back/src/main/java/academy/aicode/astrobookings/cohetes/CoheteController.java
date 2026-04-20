@@ -46,25 +46,26 @@ public class CoheteController {
 
     @ExceptionHandler(CoheteNoEncontradoException.class)
     public ResponseEntity<ErrorRespuesta> manejarNoEncontrado(CoheteNoEncontradoException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ErrorRespuesta("404", "not_found", ex.getMessage()));
+        return respuestaError(HttpStatus.NOT_FOUND, "not_found", ex.getMessage());
     }
 
     @ExceptionHandler(CoheteValidacionException.class)
     public ResponseEntity<ErrorRespuesta> manejarValidacion(CoheteValidacionException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorRespuesta("400", "validation_failed", ex.getMessage()));
+        return respuestaError(HttpStatus.BAD_REQUEST, "validation_failed", ex.getMessage());
     }
 
     @ExceptionHandler(CoheteNombreDuplicadoException.class)
     public ResponseEntity<ErrorRespuesta> manejarDuplicado(CoheteNombreDuplicadoException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(new ErrorRespuesta("409", "conflict", ex.getMessage()));
+        return respuestaError(HttpStatus.CONFLICT, "conflict", ex.getMessage());
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorRespuesta> manejarMensajeInvalido(HttpMessageNotReadableException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorRespuesta("400", "validation_failed", "Petición no válida: " + ex.getMessage()));
+        return respuestaError(HttpStatus.BAD_REQUEST, "validation_failed", "Petición no válida: " + ex.getMessage());
+    }
+
+    private ResponseEntity<ErrorRespuesta> respuestaError(HttpStatus status, String error, String mensaje) {
+        return ResponseEntity.status(status)
+                .body(new ErrorRespuesta(String.valueOf(status.value()), error, mensaje));
     }
 }
