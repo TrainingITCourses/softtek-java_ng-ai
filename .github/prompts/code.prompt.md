@@ -1,3 +1,10 @@
+---
+agent: agent
+description: This prompt is used to implement a feature based on a provided specification file, including writing unit tests for the implemented code.
+model: Auto (copilot)
+argument-hint: Provide the issue number to start coding.
+tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'github/*', 'agent', 'todo']
+---
 # Code
 
 ## Role
