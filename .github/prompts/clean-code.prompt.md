@@ -2,6 +2,9 @@
 name : limpiar
 description: Limpia el código en un archivo o carpeta especificada.
 argument-hint: Dime el archivo o carpeta a limpiar.
+agent: Plan
+model: Auto (copilot)
+tools: ['read', 'edit', 'search', 'web', 'agent', 'todo']
 ---
 
 # Clean Code 
