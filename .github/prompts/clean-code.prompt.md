@@ -1,3 +1,9 @@
+---
+name : limpiar
+description: Limpia el código en un archivo o carpeta especificada.
+argument-hint: Dime el archivo o carpeta a limpiar.
+---
+
 # Clean Code 
 
 ## Role
