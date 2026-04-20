@@ -10,6 +10,8 @@ import { CoheteFormComponent } from '../cohete-form/cohete-form.component';
 import { Cohete, CohetePeticion } from '../cohete.model';
 import { CohetesService } from '../cohetes.service';
 
+type Aviso = { texto: string; esError: boolean };
+
 @Component({
   selector: 'app-cohetes',
   imports: [CoheteFormComponent],
@@ -62,8 +64,6 @@ import { CohetesService } from '../cohetes.service';
     </main>
   `,
 })
-type Aviso = { texto: string; esError: boolean };
-
 export class CohetesComponent implements OnInit {
   private readonly formRef = viewChild<CoheteFormComponent>('formRef');
 
