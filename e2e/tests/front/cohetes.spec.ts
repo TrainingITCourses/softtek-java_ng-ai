@@ -23,6 +23,16 @@ test.describe('Cohetes', () => {
     await expect(page.getByRole('button', { name: 'Añadir cohete' })).toBeVisible();
   });
 
+  test('no permite crear cohete con capacidad 100', async ({ page }) => {
+    await page.getByRole('button', { name: 'Añadir cohete' }).click();
+
+    await page.getByRole('textbox', { name: 'Nombre' }).fill('Apolo');
+    await page.getByRole('spinbutton', { name: 'Capacidad' }).fill('100');
+    await page.getByLabel('Rango').selectOption('Luna');
+
+    await expect(page.getByRole('button', { name: 'Crear' })).toBeDisabled();
+  });
+
   test('puede crear un cohete nuevo', async ({ page }) => {
     await page.getByRole('button', { name: 'Añadir cohete' }).click();
 
