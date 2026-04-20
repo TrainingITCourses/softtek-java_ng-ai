@@ -24,9 +24,7 @@ public class CoheteService {
     }
 
     public Cohete obtener(UUID id) {
-        return repositorio.buscarPorId(id)
-                .filter(Cohete::activo)
-                .orElseThrow(() -> new CoheteNoEncontradoException(id));
+        return buscarActivo(id);
     }
 
     public Cohete crear(CohetePeticion peticion) {
@@ -39,9 +37,7 @@ public class CoheteService {
 
     public Cohete actualizar(UUID id, CohetePeticion peticion) {
         validar(peticion);
-        Cohete existente = repositorio.buscarPorId(id)
-                .filter(Cohete::activo)
-                .orElseThrow(() -> new CoheteNoEncontradoException(id));
+        Cohete existente = buscarActivo(id);
         if (repositorio.existeNombreExcluyendo(peticion.nombre(), id)) {
             throw new CoheteNombreDuplicadoException(peticion.nombre());
         }
@@ -49,10 +45,13 @@ public class CoheteService {
     }
 
     public void darDeBaja(UUID id) {
-        Cohete existente = repositorio.buscarPorId(id)
+        repositorio.guardar(buscarActivo(id).darDeBaja());
+    }
+
+    private Cohete buscarActivo(UUID id) {
+        return repositorio.buscarPorId(id)
                 .filter(Cohete::activo)
                 .orElseThrow(() -> new CoheteNoEncontradoException(id));
-        repositorio.guardar(existente.darDeBaja());
     }
 
     private void validar(CohetePeticion peticion) {
@@ -60,11 +59,11 @@ public class CoheteService {
                 || peticion.nombre().length() < NOMBRE_MIN
                 || peticion.nombre().length() > NOMBRE_MAX) {
             throw new CoheteValidacionException(
-                    "El nombre debe tener entre " + NOMBRE_MIN + " y " + NOMBRE_MAX + " caracteres");
+                    String.format("El nombre debe tener entre %d y %d caracteres", NOMBRE_MIN, NOMBRE_MAX));
         }
         if (peticion.capacidad() < CAPACIDAD_MIN || peticion.capacidad() > CAPACIDAD_MAX) {
             throw new CoheteValidacionException(
-                    "La capacidad debe estar entre " + CAPACIDAD_MIN + " y " + CAPACIDAD_MAX);
+                    String.format("La capacidad debe estar entre %d y %d", CAPACIDAD_MIN, CAPACIDAD_MAX));
         }
         if (peticion.rango() == null) {
             throw new CoheteValidacionException("El rango es obligatorio (Tierra, Luna, Marte)");
