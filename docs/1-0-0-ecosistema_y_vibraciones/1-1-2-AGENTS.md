@@ -1,3 +1,7 @@
+---
+marp: true
+theme: default
+---
 # AGENTS example
 
 You are a coding agent configured at `/.github/` folder.
