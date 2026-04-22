@@ -6,7 +6,7 @@ model: Auto (copilot)
 tools: ['vscode', 'execute', 'read', 'edit', 'search', 'web', 'github/*', 'agent', 'todo']
 handoffs: 
   - label: Release Implementation
-    agent: DevOps
+    agent: QA E2E
     prompt: release the current implementation
     send: true
 ---
