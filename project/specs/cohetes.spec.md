@@ -13,6 +13,12 @@ El personal administrativo necesita una herramienta para registrar y mantener el
 - Como `usuario` quiero **modificar los datos de un cohete** para _corregir errores o actualizar su capacidad y rango_
 - Como `usuario` quiero **dar de baja un cohete** para _retirarlo de la flota activa sin eliminar su histórico_
 
+### Fuera de scope
+
+- Eliminación física de registros en base de datos (se debe conservar de forma perpetua el histórico).
+- Asignación de cohetes a lanzamientos (pertenece a la funcionalidad específica de vuelos).
+- Seguridad, autenticación o control de acceso a la gestión de cohetes (se asume que solo personal autorizado tendrá acceso a esta funcionalidad).
+
 ---
 
 ## Boceto de la solución
@@ -46,50 +52,11 @@ Una interfaz web y un API RESTful para la gestión de cohetes. MVP para consulta
 - Mostrar resultado correcto o de error de cada operación al usuario.
 - Sin control de acceso ni autenticación de usuarios.
 
-### Contract
-
-| Método | Endpoint | Success | Error |
-|--------|----------|---------|-------|
-| `GET` | `/api/cohetes` | `200` | `500` |
-| `GET` | `/api/cohetes/:id` | `200` | `404, 500` |
-| `POST` | `/api/cohetes` | `201` | `400, 409` |
-| `PUT` | `/api/cohetes/:id` | `200` | `400, 404, 409` |
-| `DELETE` | `/api/cohetes/:id` | `204` | `404` |
-
-**Request — `CreateCohete` / `UpdateCohete`**
-
-```json
-{
-  "nombre": "string",
-  "capacidad": "number",
-  "rango": "Tierra | Luna | Marte"
-}
-```
-
-**Response — `Cohete`**
-
-```json
-{
-  "id":      "uuid",
-  "nombre": "string",
-  "capacidad": "number",
-  "rango": "Tierra | Luna | Marte"
-}
-```
-
-**Error response**
-
-```json
-{
-  "code":    "400",
-  "error":   "validation_failed",
-  "message": "La capacidad debe ser mayor a 0"
-}
-```
-
 ---
 
-## Criterios de aceptación
+## Criterios de aceptación 
+
+> Formato EARS (en español)
 
 - [x] el sistema DEBE requerir nombre, capacidad de asientos y un rango válido (Tierra, Luna, Marte) para cada cohete
 - [x] CUANDO un usuario envía datos válidos para un cohete el sistema DEBE registrar el vehículo, asignarle un id único y hacerlo disponible en el sistema
@@ -98,16 +65,3 @@ Una interfaz web y un API RESTful para la gestión de cohetes. MVP para consulta
 - [x] SI un usuario intenta asignar un rango no permitido ENTONCES el sistema DEBE rechazar la operación con un error de validación
 - [x] SI un usuario intenta asignar una capacidad no permitida ENTONCES el sistema DEBE rechazar la operación con un error de validación
 
----
-
-## Fuera de scope
-
-- Eliminación física de registros en base de datos (se debe conservar de forma perpetua el histórico).
-- Asignación de cohetes a lanzamientos (pertenece a la funcionalidad específica de vuelos).
-- Seguridad, autenticación o control de acceso a la gestión de cohetes (se asume que solo personal autorizado tendrá acceso a esta funcionalidad).
-
----
-
-## Preguntas abiertas
-
-- Ninguna por el momento.
