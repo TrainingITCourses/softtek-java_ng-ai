@@ -110,7 +110,7 @@ Resumen de tareas principales:
 
 Se ha creado un plan de implementación detallado para el frontend en `project/specs/lanzamientos.front.plan.md`.
 
-- **Plan Status**: Pending
+- **Plan Status**: Implemented
 
 Resumen de tareas principales:
 
