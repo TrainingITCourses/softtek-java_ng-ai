@@ -10,10 +10,10 @@
 ## Pasos y tareas
 
 ### Paso 1 — Modelo front, rutas y servicio
-- [ ] Definir modelo `Lanzamiento` + DTOs de petición (`LanzamientoPeticion`, `CambioEstadoLanzamientoPeticion`) en `front/src/app/lanzamientos/`.
-- [ ] Implementar `LanzamientosService` con métodos: `listar`, `obtener`, `crear`, `actualizar`, `cambiarEstado` usando `/api/lanzamientos`.
-- [ ] Extender `app.routes.ts` con ruta lazy `lanzamientos` y mantener navegación funcional desde ruta raíz.
-- [ ] Definir adaptador mínimo de errores API (`{ code, error, message }`) para mostrar mensajes consistentes en UI.
+- [x] Definir modelo `Lanzamiento` + DTOs de petición (`LanzamientoPeticion`, `CambioEstadoLanzamientoPeticion`) en `front/src/app/lanzamientos/`.
+- [x] Implementar `LanzamientosService` con métodos: `listar`, `obtener`, `crear`, `actualizar`, `cambiarEstado` usando `/api/lanzamientos`.
+- [x] Extender `app.routes.ts` con ruta lazy `lanzamientos` y mantener navegación funcional desde ruta raíz.
+- [x] Definir adaptador mínimo de errores API (`{ code, error, message }`) para mostrar mensajes consistentes en UI.
 
 ### Paso 2 — Pantalla de listado y detalle
 - [ ] Crear componente contenedor `LanzamientosComponent` con carga inicial, estado local (loading/error/success) y recarga tras operaciones.
