@@ -98,7 +98,7 @@ Ejemplo error:
 
 Se ha creado un plan de implementación detallado para el backend en `project/specs/lanzamientos.back.plan.md`.
 
-- **Plan Status**: Pending
+- **Plan Status**: Implemented
 
 Resumen de tareas principales:
 

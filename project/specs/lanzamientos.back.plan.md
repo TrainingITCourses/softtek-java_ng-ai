@@ -5,7 +5,7 @@
 - Tier: `back` (API REST, validaciones de negocio, persistencia y reglas de ciclo de vida)
 - Objetivo: Implementar entidad `Lanzamiento`, repositorio, servicio, controlador y reglas de transición de estados con validaciones y pruebas.
 
-**Plan Status**: Pending
+**Plan Status**: Implemented
 
 ## Pasos y tareas
 
@@ -27,8 +27,8 @@
 - [x] Documentar contratos y ejemplos de payload.
 
 ### Paso 5 — Tests y verificación
-- [ ] Añadir pruebas unitarias para `LanzamientoService` (validaciones, transiciones y reglas).
-- [ ] Añadir pruebas de integración para los endpoints principales.
+- [x] Añadir pruebas unitarias para `LanzamientoService` (validaciones, transiciones y reglas).
+- [x] Añadir pruebas de integración para los endpoints principales.
 
 ## Criterios de validación (back)
 - El backend rechaza creación/edición con `cohete` inactivo o inexistente.
