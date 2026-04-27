@@ -18,8 +18,8 @@
 ### Paso 3 — Reglas de negocio y validaciones
 - [x] Validar existencia y `activo=true` del `coheteId` antes de crear/editar.
 - [x] En `create` asignar estado inicial `Programado`.
-- [ ] Implementar transiciones permitidas y rechazar cambios inválidos (`Cancelado` es terminal).
-- [ ] Exigir `motivo` no vacío para `Suspendido` y `Cancelado`.
+- [x] Implementar transiciones permitidas y rechazar cambios inválidos (`Cancelado` es terminal).
+- [x] Exigir `motivo` no vacío para `Suspendido` y `Cancelado`.
 - [ ] Devolver errores estructurados `{ code, error, message }`.
 
 ### Paso 4 — API y contratos
