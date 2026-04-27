@@ -10,12 +10,10 @@
 ## Pasos y tareas
 
 ### Paso 1 — Modelo y persistencia
-- [ ] Crear entidad `Lanzamiento` con campos `id`, `coheteId`, `fecha`, `precio`, `estado`, `motivo`, `activo`.
-- [ ] Añadir migración/esquema y mapeo JPA (si aplica) o DDL correspondiente.
-
-### Paso 2 — Repositorio y servicios
-- [ ] Implementar `LanzamientoRepository` con consultas para listado, filtro por estado y cohete.
-- [ ] Implementar `LanzamientoService` con métodos: create, update, find, softDelete, changeState.
+ [x] Definir modelo de dominio `Lanzamiento` con campos `id`, `coheteId`, `fecha`, `precio`, `estado`, `motivo`, `activo`.
+ [x] Definir enum `EstadoLanzamiento`: `Programado`, `Confirmado`, `Completado`, `Suspendido`, `Cancelado`.
+ [x] Implementar `InMemoryLanzamientoRepository` con almacenamiento en memoria y operaciones CRUD + baja lógica.
+ [x] Definir interfaz de repositorio para desacoplar servicio y facilitar migración futura a DB.
 
 ### Paso 3 — Reglas de negocio y validaciones
 - [ ] Validar existencia y `activo=true` del `coheteId` antes de crear/editar.
