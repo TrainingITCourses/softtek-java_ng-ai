@@ -20,11 +20,11 @@
 - [x] En `create` asignar estado inicial `Programado`.
 - [x] Implementar transiciones permitidas y rechazar cambios inválidos (`Cancelado` es terminal).
 - [x] Exigir `motivo` no vacío para `Suspendido` y `Cancelado`.
-- [ ] Devolver errores estructurados `{ code, error, message }`.
+- [x] Devolver errores estructurados `{ code, error, message }`.
 
 ### Paso 4 — API y contratos
-- [ ] Exponer endpoints REST: GET `/api/lanzamientos`, GET `/api/lanzamientos/{id}`, POST `/api/lanzamientos`, PUT `/api/lanzamientos/{id}`, POST `/api/lanzamientos/{id}/state`.
-- [ ] Documentar contratos y ejemplos de payload.
+- [x] Exponer endpoints REST: GET `/api/lanzamientos`, GET `/api/lanzamientos/{id}`, POST `/api/lanzamientos`, PUT `/api/lanzamientos/{id}`, POST `/api/lanzamientos/{id}/state`.
+- [x] Documentar contratos y ejemplos de payload.
 
 ### Paso 5 — Tests y verificación
 - [ ] Añadir pruebas unitarias para `LanzamientoService` (validaciones, transiciones y reglas).
