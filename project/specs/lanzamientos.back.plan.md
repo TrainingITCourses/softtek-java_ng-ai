@@ -10,14 +10,14 @@
 ## Pasos y tareas
 
 ### Paso 1 — Modelo y persistencia
- [x] Definir modelo de dominio `Lanzamiento` con campos `id`, `coheteId`, `fecha`, `precio`, `estado`, `motivo`, `activo`.
- [x] Definir enum `EstadoLanzamiento`: `Programado`, `Confirmado`, `Completado`, `Suspendido`, `Cancelado`.
- [x] Implementar `InMemoryLanzamientoRepository` con almacenamiento en memoria y operaciones CRUD + baja lógica.
- [x] Definir interfaz de repositorio para desacoplar servicio y facilitar migración futura a DB.
+- [x] Definir modelo de dominio `Lanzamiento` con campos `id`, `coheteId`, `fecha`, `precio`, `estado`, `motivo`, `activo`.
+- [x] Definir enum `EstadoLanzamiento`: `Programado`, `Confirmado`, `Completado`, `Suspendido`, `Cancelado`.
+- [x] Implementar `InMemoryLanzamientoRepository` con almacenamiento en memoria y operaciones CRUD + baja lógica.
+- [x] Definir interfaz de repositorio para desacoplar servicio y facilitar migración futura a DB.
 
 ### Paso 3 — Reglas de negocio y validaciones
-- [ ] Validar existencia y `activo=true` del `coheteId` antes de crear/editar.
-- [ ] En `create` asignar estado inicial `Programado`.
+- [x] Validar existencia y `activo=true` del `coheteId` antes de crear/editar.
+- [x] En `create` asignar estado inicial `Programado`.
 - [ ] Implementar transiciones permitidas y rechazar cambios inválidos (`Cancelado` es terminal).
 - [ ] Exigir `motivo` no vacío para `Suspendido` y `Cancelado`.
 - [ ] Devolver errores estructurados `{ code, error, message }`.
