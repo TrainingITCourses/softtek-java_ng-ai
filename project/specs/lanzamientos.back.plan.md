@@ -5,32 +5,30 @@
 - Tier: `back` (API REST, validaciones de negocio, persistencia y reglas de ciclo de vida)
 - Objetivo: Implementar entidad `Lanzamiento`, repositorio, servicio, controlador y reglas de transición de estados con validaciones y pruebas.
 
-**Plan Status**: Pending
+**Plan Status**: Implemented
 
 ## Pasos y tareas
 
 ### Paso 1 — Modelo y persistencia
-- [ ] Crear entidad `Lanzamiento` con campos `id`, `coheteId`, `fecha`, `precio`, `estado`, `motivo`, `activo`.
-- [ ] Añadir migración/esquema y mapeo JPA (si aplica) o DDL correspondiente.
-
-### Paso 2 — Repositorio y servicios
-- [ ] Implementar `LanzamientoRepository` con consultas para listado, filtro por estado y cohete.
-- [ ] Implementar `LanzamientoService` con métodos: create, update, find, softDelete, changeState.
+- [x] Definir modelo de dominio `Lanzamiento` con campos `id`, `coheteId`, `fecha`, `precio`, `estado`, `motivo`, `activo`.
+- [x] Definir enum `EstadoLanzamiento`: `Programado`, `Confirmado`, `Completado`, `Suspendido`, `Cancelado`.
+- [x] Implementar `InMemoryLanzamientoRepository` con almacenamiento en memoria y operaciones CRUD + baja lógica.
+- [x] Definir interfaz de repositorio para desacoplar servicio y facilitar migración futura a DB.
 
 ### Paso 3 — Reglas de negocio y validaciones
-- [ ] Validar existencia y `activo=true` del `coheteId` antes de crear/editar.
-- [ ] En `create` asignar estado inicial `Programado`.
-- [ ] Implementar transiciones permitidas y rechazar cambios inválidos (`Cancelado` es terminal).
-- [ ] Exigir `motivo` no vacío para `Suspendido` y `Cancelado`.
-- [ ] Devolver errores estructurados `{ code, error, message }`.
+- [x] Validar existencia y `activo=true` del `coheteId` antes de crear/editar.
+- [x] En `create` asignar estado inicial `Programado`.
+- [x] Implementar transiciones permitidas y rechazar cambios inválidos (`Cancelado` es terminal).
+- [x] Exigir `motivo` no vacío para `Suspendido` y `Cancelado`.
+- [x] Devolver errores estructurados `{ code, error, message }`.
 
 ### Paso 4 — API y contratos
-- [ ] Exponer endpoints REST: GET `/api/lanzamientos`, GET `/api/lanzamientos/{id}`, POST `/api/lanzamientos`, PUT `/api/lanzamientos/{id}`, POST `/api/lanzamientos/{id}/state`.
-- [ ] Documentar contratos y ejemplos de payload.
+- [x] Exponer endpoints REST: GET `/api/lanzamientos`, GET `/api/lanzamientos/{id}`, POST `/api/lanzamientos`, PUT `/api/lanzamientos/{id}`, POST `/api/lanzamientos/{id}/state`.
+- [x] Documentar contratos y ejemplos de payload.
 
 ### Paso 5 — Tests y verificación
-- [ ] Añadir pruebas unitarias para `LanzamientoService` (validaciones, transiciones y reglas).
-- [ ] Añadir pruebas de integración para los endpoints principales.
+- [x] Añadir pruebas unitarias para `LanzamientoService` (validaciones, transiciones y reglas).
+- [x] Añadir pruebas de integración para los endpoints principales.
 
 ## Criterios de validación (back)
 - El backend rechaza creación/edición con `cohete` inactivo o inexistente.

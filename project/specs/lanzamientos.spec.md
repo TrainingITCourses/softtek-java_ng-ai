@@ -48,6 +48,43 @@ La funcionalidad permitirá dar de alta lanzamientos vinculados a un cohete acti
 - Tratar `Cancelado` como estado terminal y permitir que `Suspendido` pueda revertirse a `Programado` o `Confirmado`.
 - Devolver errores estructurados con formato `{ code, error, message }` ante validaciones o reglas de negocio incumplidas.
 
+#### Contratos API (back)
+
+- `GET /api/lanzamientos`: lista de lanzamientos activos.
+- `GET /api/lanzamientos/{id}`: detalle de lanzamiento activo por id.
+- `POST /api/lanzamientos`: crea lanzamiento con estado inicial `Programado`.
+- `PUT /api/lanzamientos/{id}`: actualiza cohete, fecha y precio.
+- `POST /api/lanzamientos/{id}/state`: cambia estado operativo según reglas.
+
+Ejemplo `POST /api/lanzamientos`:
+
+```json
+{
+	"coheteId": "d2719f2a-1ee3-44f6-a8d0-b123456789ab",
+	"fecha": "2026-06-15T18:30:00Z",
+	"precio": 1499.99
+}
+```
+
+Ejemplo `POST /api/lanzamientos/{id}/state`:
+
+```json
+{
+	"estado": "Suspendido",
+	"motivo": "Vientos cruzados fuera de umbral"
+}
+```
+
+Ejemplo error:
+
+```json
+{
+	"code": "400",
+	"error": "validation_failed",
+	"message": "El motivo es obligatorio para estados Suspendido y Cancelado"
+}
+```
+
 ### Front
 
 - Mostrar un listado de lanzamientos con cohete, fecha, precio y estado visible.
@@ -61,7 +98,7 @@ La funcionalidad permitirá dar de alta lanzamientos vinculados a un cohete acti
 
 Se ha creado un plan de implementación detallado para el backend en `project/specs/lanzamientos.back.plan.md`.
 
-- **Plan Status**: Pending
+- **Plan Status**: Implemented
 
 Resumen de tareas principales:
 
