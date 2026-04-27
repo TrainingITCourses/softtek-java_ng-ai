@@ -7,7 +7,7 @@ Estado actual del repositorio: la funcionalidad de cohetes está implementada y 
 | spec-id | dependencias | estado |
 | --- | --- | --- |
 | cohetes | — | completada |
-| lanzamientos | cohetes | pendiente |
+| lanzamientos | cohetes | en progreso |
 | pasajeros | — | pendiente |
 | reservas | lanzamientos, pasajeros | bloqueada |
 | seguridad-mvp | cohetes, lanzamientos, pasajeros, reservas | en progreso |

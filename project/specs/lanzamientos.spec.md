@@ -57,6 +57,31 @@ La funcionalidad permitirá dar de alta lanzamientos vinculados a un cohete acti
 
 ---
 
+#### Plan de implementación (Back)
+
+Se ha creado un plan de implementación detallado para el backend en `project/specs/lanzamientos.back.plan.md`.
+
+- **Plan Status**: Pending
+
+Resumen de tareas principales:
+
+- Modelado y persistencia de `Lanzamiento`.
+- Servicios y validaciones de negocio (cohete activo, transiciones, motivo obligatorio).
+- Endpoints REST y pruebas de integración.
+
+#### Plan de implementación (Front)
+
+Se ha creado un plan de implementación detallado para el frontend en `project/specs/lanzamientos.front.plan.md`.
+
+- **Plan Status**: Pending
+
+Resumen de tareas principales:
+
+- Listado y detalle de lanzamientos.
+- Formulario de alta/edición con validaciones y selector de cohetes activos.
+- Acciones para cambios de estado con modal de motivo y tests E2E.
+
+
 ## Criterios de aceptación
 
 - [ ] el sistema DEBE permitir registrar un lanzamiento indicando cohete, fecha y precio válidos.
