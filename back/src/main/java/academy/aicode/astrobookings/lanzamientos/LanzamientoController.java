@@ -1,5 +1,11 @@
 package academy.aicode.astrobookings.lanzamientos;
 
+import academy.aicode.astrobookings.reservas.Reserva;
+import academy.aicode.astrobookings.reservas.ReservaEstadoNoPermitidoException;
+import academy.aicode.astrobookings.reservas.ReservaPeticion;
+import academy.aicode.astrobookings.reservas.ReservaService;
+import academy.aicode.astrobookings.reservas.ReservaSinPlazasException;
+import academy.aicode.astrobookings.reservas.ReservaValidacionException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -20,9 +26,11 @@ import java.util.UUID;
 public class LanzamientoController {
 
     private final LanzamientoService servicio;
+    private final ReservaService reservaService;
 
-    public LanzamientoController(LanzamientoService servicio) {
+    public LanzamientoController(LanzamientoService servicio, ReservaService reservaService) {
         this.servicio = servicio;
+        this.reservaService = reservaService;
     }
 
     @GetMapping
@@ -50,6 +58,11 @@ public class LanzamientoController {
         return servicio.cambiarEstado(id, peticion);
     }
 
+    @PostMapping("/{id}/reservas")
+    public ResponseEntity<Reserva> crearReserva(@PathVariable UUID id, @RequestBody ReservaPeticion peticion) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reservaService.crear(id, peticion));
+    }
+
     @ExceptionHandler(LanzamientoNoEncontradoException.class)
     public ResponseEntity<ErrorRespuesta> manejarNoEncontrado(LanzamientoNoEncontradoException ex) {
         return respuestaError(HttpStatus.NOT_FOUND, "not_found", ex.getMessage());
@@ -62,6 +75,16 @@ public class LanzamientoController {
 
     @ExceptionHandler(LanzamientoTransicionInvalidaException.class)
     public ResponseEntity<ErrorRespuesta> manejarTransicionInvalida(LanzamientoTransicionInvalidaException ex) {
+        return respuestaError(HttpStatus.CONFLICT, "conflict", ex.getMessage());
+    }
+
+    @ExceptionHandler(ReservaValidacionException.class)
+    public ResponseEntity<ErrorRespuesta> manejarReservaValidacion(ReservaValidacionException ex) {
+        return respuestaError(HttpStatus.BAD_REQUEST, "validation_failed", ex.getMessage());
+    }
+
+    @ExceptionHandler({ReservaEstadoNoPermitidoException.class, ReservaSinPlazasException.class})
+    public ResponseEntity<ErrorRespuesta> manejarReservaConflicto(RuntimeException ex) {
         return respuestaError(HttpStatus.CONFLICT, "conflict", ex.getMessage());
     }
 

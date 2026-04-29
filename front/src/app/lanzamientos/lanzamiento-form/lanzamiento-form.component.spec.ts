@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 import { CohetesService } from '../../cohetes/cohetes.service';
 import { Lanzamiento } from '../lanzamiento.model';
@@ -74,6 +74,8 @@ describe('LanzamientoFormComponent', () => {
       precio: 999,
       estado: 'Confirmado',
       motivo: null,
+      capacidadTotal: 4,
+      plazasDisponibles: 4,
       activo: true,
     };
 

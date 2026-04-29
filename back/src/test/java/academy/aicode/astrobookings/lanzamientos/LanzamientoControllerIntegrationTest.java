@@ -5,6 +5,8 @@ import academy.aicode.astrobookings.cohetes.CohetePeticion;
 import academy.aicode.astrobookings.cohetes.CoheteRepository;
 import academy.aicode.astrobookings.cohetes.CoheteService;
 import academy.aicode.astrobookings.cohetes.Rango;
+import academy.aicode.astrobookings.reservas.InMemoryReservaRepository;
+import academy.aicode.astrobookings.reservas.ReservaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,9 +29,13 @@ class LanzamientoControllerIntegrationTest {
     @BeforeEach
     void setUp() {
         coheteService = new CoheteService(new CoheteRepository());
-        LanzamientoService lanzamientoService =
-                new LanzamientoService(new InMemoryLanzamientoRepository(), coheteService);
-        LanzamientoController controller = new LanzamientoController(lanzamientoService);
+        InMemoryLanzamientoRepository lanzamientoRepository = new InMemoryLanzamientoRepository();
+        LanzamientoService lanzamientoService = new LanzamientoService(lanzamientoRepository, coheteService);
+        ReservaService reservaService = new ReservaService(
+                new InMemoryReservaRepository(),
+                lanzamientoService,
+                lanzamientoRepository);
+        LanzamientoController controller = new LanzamientoController(lanzamientoService, reservaService);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -95,8 +101,61 @@ class LanzamientoControllerIntegrationTest {
                 .andExpect(jsonPath("$.error").value("conflict"));
     }
 
+            @Test
+            void crear_reserva_valida_devuelve_201_y_luego_sin_plazas_devuelve_409() throws Exception {
+            String lanzamientoId = crearLanzamientoYDevolverId(2);
+
+            mockMvc.perform(post("/api/lanzamientos/{id}/reservas", lanzamientoId)
+                    .contentType(APPLICATION_JSON)
+                    .content(jsonCrearReserva("Ada", "ada@example.com", "+34123456789")))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty())
+                .andExpect(jsonPath("$.plazas").value(1))
+                .andExpect(jsonPath("$.activa").value(true));
+
+            mockMvc.perform(post("/api/lanzamientos/{id}/reservas", lanzamientoId)
+                    .contentType(APPLICATION_JSON)
+                    .content(jsonCrearReserva("Linus", "linus@example.com", "123456789")))
+                .andExpect(status().isCreated());
+
+            mockMvc.perform(post("/api/lanzamientos/{id}/reservas", lanzamientoId)
+                    .contentType(APPLICATION_JSON)
+                    .content(jsonCrearReserva("Grace", "grace@example.com", "123456780")))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("409"))
+                .andExpect(jsonPath("$.error").value("conflict"));
+            }
+
+            @Test
+            void crear_reserva_en_estado_no_permitido_devuelve_conflict() throws Exception {
+            String lanzamientoId = crearLanzamientoYDevolverId();
+            String confirmarBody = "{\"estado\":\"Confirmado\",\"motivo\":null}";
+            String completarBody = "{\"estado\":\"Completado\",\"motivo\":null}";
+
+            mockMvc.perform(post("/api/lanzamientos/{id}/state", lanzamientoId)
+                    .contentType(APPLICATION_JSON)
+                    .content(confirmarBody))
+                .andExpect(status().isOk());
+
+            mockMvc.perform(post("/api/lanzamientos/{id}/state", lanzamientoId)
+                    .contentType(APPLICATION_JSON)
+                    .content(completarBody))
+                .andExpect(status().isOk());
+
+            mockMvc.perform(post("/api/lanzamientos/{id}/reservas", lanzamientoId)
+                    .contentType(APPLICATION_JSON)
+                    .content(jsonCrearReserva("Ada", "ada@example.com", "123456789")))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("409"))
+                .andExpect(jsonPath("$.error").value("conflict"));
+            }
+
     private String crearLanzamientoYDevolverId() throws Exception {
-        Cohete cohete = coheteService.crear(new CohetePeticion("Atlas", 5, Rango.Tierra));
+        return crearLanzamientoYDevolverId(5);
+    }
+
+    private String crearLanzamientoYDevolverId(int capacidadCohete) throws Exception {
+        Cohete cohete = coheteService.crear(new CohetePeticion("Atlas", capacidadCohete, Rango.Tierra));
         String body = jsonCrearLanzamiento(cohete.id(), "2026-09-10T10:30:00Z", "1499.99");
 
         String respuesta = mockMvc.perform(post("/api/lanzamientos")
@@ -120,5 +179,13 @@ class LanzamientoControllerIntegrationTest {
                 coheteId,
                 fechaIso,
                 precio);
+    }
+
+    private String jsonCrearReserva(String nombre, String email, String telefono) {
+        return String.format(
+                "{\"nombre\":\"%s\",\"email\":\"%s\",\"telefono\":\"%s\"}",
+                nombre,
+                email,
+                telefono);
     }
 }

@@ -20,7 +20,25 @@ export interface Lanzamiento {
   precio: number;
   estado: EstadoLanzamiento;
   motivo: string | null;
+  capacidadTotal: number;
+  plazasDisponibles: number;
   activo: boolean;
+}
+
+export interface Reserva {
+  id: string;
+  lanzamientoId: string;
+  nombre: string;
+  email: string;
+  telefono: string;
+  plazas: number;
+  activa: boolean;
+}
+
+export interface ReservaPeticion {
+  nombre: string;
+  email: string;
+  telefono: string;
 }
 
 export interface LanzamientoPeticion {

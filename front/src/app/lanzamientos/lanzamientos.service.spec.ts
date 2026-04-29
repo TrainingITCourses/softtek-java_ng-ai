@@ -1,11 +1,12 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { provideHttpClient } from '@angular/common/http';
+import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import {
-  CambioEstadoLanzamientoPeticion,
-  Lanzamiento,
-  LanzamientoPeticion,
+    CambioEstadoLanzamientoPeticion,
+    Lanzamiento,
+    LanzamientoPeticion,
+    Reserva,
+    ReservaPeticion,
 } from './lanzamiento.model';
 import { extraerMensajeErrorApi } from './lanzamientos.error-adapter';
 import { LanzamientosService } from './lanzamientos.service';
@@ -17,7 +18,25 @@ const lanzamientoEjemplo: Lanzamiento = {
   precio: 1499.99,
   estado: 'Programado',
   motivo: null,
+  capacidadTotal: 5,
+  plazasDisponibles: 5,
   activo: true,
+};
+
+const reservaPeticionEjemplo: ReservaPeticion = {
+  nombre: 'Ada Lovelace',
+  email: 'ada@example.com',
+  telefono: '+34123456789',
+};
+
+const reservaEjemplo: Reserva = {
+  id: 'res-1',
+  lanzamientoId: 'id-1',
+  nombre: 'Ada Lovelace',
+  email: 'ada@example.com',
+  telefono: '+34123456789',
+  plazas: 1,
+  activa: true,
 };
 
 const peticionEjemplo: LanzamientoPeticion = {
@@ -96,6 +115,17 @@ describe('LanzamientosService', () => {
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(peticionEstadoEjemplo);
     req.flush({ ...lanzamientoEjemplo, estado: 'Confirmado' });
+  });
+
+  it('crearReserva llama POST /api/lanzamientos/:id/reservas', () => {
+    servicio.crearReserva('id-1', reservaPeticionEjemplo).subscribe((reserva) => {
+      expect(reserva).toEqual(reservaEjemplo);
+    });
+
+    const req = httpMock.expectOne('/api/lanzamientos/id-1/reservas');
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(reservaPeticionEjemplo);
+    req.flush(reservaEjemplo);
   });
 
   it('extrae mensaje estructurado de error API', () => {

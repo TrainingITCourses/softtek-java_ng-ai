@@ -29,15 +29,20 @@ public class LanzamientoService {
 
     public Lanzamiento crear(LanzamientoPeticion peticion) {
         validarPeticion(peticion);
-        validarCoheteActivo(peticion.coheteId());
-        return repositorio.guardar(Lanzamiento.crear(peticion.coheteId(), peticion.fecha(), peticion.precio()));
+        int capacidadCohete = obtenerCapacidadCoheteActivo(peticion.coheteId());
+        return repositorio.guardar(Lanzamiento.crear(peticion.coheteId(), peticion.fecha(), peticion.precio(), capacidadCohete));
     }
 
     public Lanzamiento actualizar(UUID id, LanzamientoPeticion peticion) {
         validarPeticion(peticion);
-        validarCoheteActivo(peticion.coheteId());
+        int capacidadCohete = obtenerCapacidadCoheteActivo(peticion.coheteId());
         Lanzamiento existente = buscarActivo(id);
-        return repositorio.guardar(existente.actualizar(peticion.coheteId(), peticion.fecha(), peticion.precio()));
+        int plazasReservadas = existente.capacidadTotal() - existente.plazasDisponibles();
+        if (capacidadCohete < plazasReservadas) {
+            throw new LanzamientoValidacionException("La capacidad del nuevo cohete no alcanza para las plazas ya reservadas");
+        }
+
+        return repositorio.guardar(existente.actualizar(peticion.coheteId(), peticion.fecha(), peticion.precio(), capacidadCohete));
     }
 
     public void darDeBaja(UUID id) {
@@ -77,9 +82,9 @@ public class LanzamientoService {
         }
     }
 
-    private void validarCoheteActivo(UUID coheteId) {
+    private int obtenerCapacidadCoheteActivo(UUID coheteId) {
         try {
-            coheteService.obtener(coheteId);
+            return coheteService.obtener(coheteId).capacidad();
         } catch (CoheteNoEncontradoException ex) {
             throw new LanzamientoValidacionException("El cohete asignado no existe o está inactivo: " + coheteId);
         }

@@ -2,9 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import {
-  CambioEstadoLanzamientoPeticion,
-  Lanzamiento,
-  LanzamientoPeticion,
+    CambioEstadoLanzamientoPeticion,
+    Lanzamiento,
+    LanzamientoPeticion,
+    Reserva,
+    ReservaPeticion,
 } from './lanzamiento.model';
 
 @Injectable({ providedIn: 'root' })
@@ -30,5 +32,9 @@ export class LanzamientosService {
 
   cambiarEstado(id: string, peticion: CambioEstadoLanzamientoPeticion): Observable<Lanzamiento> {
     return this.http.post<Lanzamiento>(`${this.base}/${id}/state`, peticion);
+  }
+
+  crearReserva(id: string, peticion: ReservaPeticion): Observable<Reserva> {
+    return this.http.post<Reserva>(`${this.base}/${id}/reservas`, peticion);
   }
 }

@@ -1,21 +1,23 @@
 import {
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  signal,
-  viewChild,
+    ChangeDetectionStrategy,
+    Component,
+    ElementRef,
+    inject,
+    OnInit,
+    signal,
+    viewChild,
 } from '@angular/core';
 import { LanzamientoFormComponent } from '../lanzamiento-form/lanzamiento-form.component';
-import { extraerMensajeErrorApi } from '../lanzamientos.error-adapter';
 import { obtenerTransicionesPermitidas, requiereMotivo } from '../lanzamiento-transiciones';
 import {
-  EstadoLanzamiento,
-  Lanzamiento,
-  LanzamientoPeticion,
+    EstadoLanzamiento,
+    Lanzamiento,
+    LanzamientoPeticion,
+    ReservaPeticion,
 } from '../lanzamiento.model';
+import { extraerMensajeErrorApi } from '../lanzamientos.error-adapter';
 import { LanzamientosService } from '../lanzamientos.service';
+import { ReservaFormComponent } from '../reserva-form/reserva-form.component';
 
 type EstadoCarga = 'idle' | 'loading' | 'success' | 'error';
 
@@ -31,7 +33,7 @@ type ModalCambioEstado = {
 
 @Component({
   selector: 'app-lanzamientos',
-  imports: [LanzamientoFormComponent],
+  imports: [LanzamientoFormComponent, ReservaFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <main>
@@ -103,12 +105,31 @@ type ModalCambioEstado = {
           <p><strong>Fecha:</strong> {{ formatearFecha(detalle.fecha) }}</p>
           <p><strong>Precio:</strong> {{ formatearPrecio(detalle.precio) }}</p>
           <p><strong>Estado:</strong> {{ detalle.estado }}</p>
+          <p><strong>Capacidad total:</strong> {{ detalle.capacidadTotal }}</p>
+          <p><strong>Plazas disponibles:</strong> {{ detalle.plazasDisponibles }}</p>
           @if (detalle.motivo) {
             <p><strong>Motivo:</strong> {{ detalle.motivo }}</p>
           } @else {
             <p><strong>Motivo:</strong> Sin motivo</p>
           }
           <p><strong>Activo:</strong> {{ detalle.activo ? 'Si' : 'No' }}</p>
+
+          @if (!mostrarFormularioReserva()) {
+            <button
+              type="button"
+              (click)="abrirFormularioReserva()"
+              [disabled]="!puedeReservar(detalle)"
+            >
+              Crear reserva
+            </button>
+          }
+
+          @if (mostrarFormularioReserva()) {
+            <app-reserva-form
+              (guardado)="guardarReserva($event)"
+              (cancelado)="cerrarFormularioReserva()"
+            />
+          }
         </section>
       } @else {
         <p>Selecciona un lanzamiento para ver el detalle.</p>
@@ -150,6 +171,7 @@ export class LanzamientosComponent implements OnInit {
   protected readonly lanzamientoSeleccionado = signal<Lanzamiento | null>(null);
   protected readonly lanzamientoEnEdicion = signal<Lanzamiento | null>(null);
   protected readonly mostrarFormulario = signal(false);
+  protected readonly mostrarFormularioReserva = signal(false);
   protected readonly modalCambioEstado = signal<ModalCambioEstado | null>(null);
   protected readonly motivoCambioEstado = signal('');
   protected readonly errorModalCambioEstado = signal<string | null>(null);
@@ -161,6 +183,7 @@ export class LanzamientosComponent implements OnInit {
 
   protected seleccionarDetalle(lanzamiento: Lanzamiento): void {
     this.lanzamientoSeleccionado.set(lanzamiento);
+    this.mostrarFormularioReserva.set(false);
   }
 
   protected abrirFormularioCrear(): void {
@@ -229,6 +252,41 @@ export class LanzamientosComponent implements OnInit {
     this.motivoCambioEstado.set(elemento?.value ?? '');
   }
 
+  protected abrirFormularioReserva(): void {
+    this.mostrarFormularioReserva.set(true);
+    this.aviso.set(null);
+  }
+
+  protected cerrarFormularioReserva(): void {
+    this.mostrarFormularioReserva.set(false);
+  }
+
+  protected guardarReserva(peticion: ReservaPeticion): void {
+    const detalle = this.lanzamientoSeleccionado();
+    if (!detalle) {
+      return;
+    }
+
+    this.servicio.crearReserva(detalle.id, peticion).subscribe({
+      next: () => {
+        this.mostrarFormularioReserva.set(false);
+        this.recargarTrasOperacion(detalle.id);
+        this.aviso.set({ texto: 'Reserva creada correctamente', esError: false });
+      },
+      error: (error) => {
+        this.aviso.set({
+          texto: extraerMensajeErrorApi(error, 'No se pudo crear la reserva'),
+          esError: true,
+        });
+      },
+    });
+  }
+
+  protected puedeReservar(lanzamiento: Lanzamiento): boolean {
+    const estadoPermitido = lanzamiento.estado === 'Programado' || lanzamiento.estado === 'Confirmado';
+    return estadoPermitido && lanzamiento.plazasDisponibles > 0;
+  }
+
   protected confirmarCambioEstadoConMotivo(): void {
     const modal = this.modalCambioEstado();
     if (!modal) {
@@ -273,6 +331,7 @@ export class LanzamientosComponent implements OnInit {
         this.estadoCarga.set('success');
         this.lanzamientos.set(lista);
         this.lanzamientoSeleccionado.set(lista[0] ?? null);
+        this.mostrarFormularioReserva.set(false);
         this.aviso.set(null);
       },
       error: (error) => {
