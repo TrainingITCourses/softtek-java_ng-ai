@@ -34,9 +34,11 @@ test.describe('Cohetes', () => {
   });
 
   test('puede crear un cohete nuevo', async ({ page }) => {
+    const nombre = `A${Date.now().toString(36).slice(-5)}${Math.floor(Math.random() * 36).toString(36)}`;
+
     await page.getByRole('button', { name: 'Añadir cohete' }).click();
 
-    await page.getByRole('textbox', { name: 'Nombre' }).fill('Apolo');
+    await page.getByRole('textbox', { name: 'Nombre' }).fill(nombre);
     await page.getByLabel('Rango').selectOption('Luna');
 
     const btnCrear = page.getByRole('button', { name: 'Crear' });
@@ -44,7 +46,8 @@ test.describe('Cohetes', () => {
     await btnCrear.click();
 
     await expect(page.getByRole('status')).toHaveText('Cohete creado');
-    await expect(page.getByRole('cell', { name: 'Apolo' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'Luna' })).toBeVisible();
+    const fila = page.getByRole('row').filter({ has: page.getByRole('cell', { name: nombre }) });
+    await expect(fila.getByRole('cell', { name: nombre })).toBeVisible();
+    await expect(fila.getByRole('cell', { name: 'Luna' })).toBeVisible();
   });
 });

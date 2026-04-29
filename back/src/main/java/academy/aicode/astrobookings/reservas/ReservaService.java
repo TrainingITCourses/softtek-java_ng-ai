@@ -59,18 +59,30 @@ public class ReservaService {
             throw new ReservaValidacionException("La petición es obligatoria");
         }
 
-        if (peticion.nombre() == null || peticion.nombre().isBlank()) {
+        validarNombre(peticion.nombre());
+        validarEmail(peticion.email());
+        validarTelefono(peticion.telefono());
+    }
+
+    private void validarNombre(String nombre) {
+        if (estaVacio(nombre)) {
             throw new ReservaValidacionException("El nombre es obligatorio");
         }
+    }
 
-        if (peticion.email() == null || peticion.email().isBlank() || !EMAIL_REGEX.matcher(peticion.email().trim()).matches()) {
+    private void validarEmail(String email) {
+        if (estaVacio(email) || !EMAIL_REGEX.matcher(email.trim()).matches()) {
             throw new ReservaValidacionException("El email no es válido");
         }
+    }
 
-        if (peticion.telefono() == null
-                || peticion.telefono().isBlank()
-                || !TELEFONO_REGEX.matcher(peticion.telefono().trim()).matches()) {
+    private void validarTelefono(String telefono) {
+        if (estaVacio(telefono) || !TELEFONO_REGEX.matcher(telefono.trim()).matches()) {
             throw new ReservaValidacionException("El teléfono debe tener entre 7 y 15 dígitos, con prefijo + opcional");
         }
+    }
+
+    private boolean estaVacio(String valor) {
+        return valor == null || valor.isBlank();
     }
 }

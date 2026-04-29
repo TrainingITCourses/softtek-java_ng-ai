@@ -34,7 +34,7 @@ applyTo: "e2e/tests/**/*.spec.ts, e2e/playwright.config.ts"
   - Límites de validación (ej. mínimo/máximo permitido).
   - Caso válido (status esperado de creación).
 - Para recursos creados durante el test, realizar limpieza explícita (`DELETE`) para evitar acoplamiento entre ejecuciones.
-- Cuando se necesiten datos únicos, generarlos de forma simple y legible (por ejemplo sufijo aleatorio corto).
+- Cuando se necesiten datos únicos, generarlos de forma simple y legible, pero suficientemente robusta para ejecución paralela y estado persistido en memoria (por ejemplo sufijo corto derivado de tiempo + aleatorio, manteniendo los límites de validación del dominio).
 
 ## Asersiones y robustez
 
@@ -58,3 +58,7 @@ applyTo: "e2e/tests/**/*.spec.ts, e2e/playwright.config.ts"
   - `npm run test:back` para API.
   - `npm run report` para reporte HTML.
 - No introducir comandos alternativos si no aportan valor claro frente a estos scripts.
+
+- Asegúrate de haber arrancado los servicios necesarios (frontend en `localhost:4200` y backend en `localhost:8080`) antes de ejecutar las pruebas.
+- Al finalizar pruebas, cierra los procesos de prueba y limpia cualquier dato creado durante las pruebas para mantener un entorno limpio para futuras ejecuciones.
+- Si una prueba fall, intenta arreglarla y vuelve a ejecutar para confirmar que el fallo se ha resuelto antes de continuar con otras tareas. PERO no lo hagas más de dos veces. Si el fallo persiste, documenta el error y avisa al equipo para revisión.
