@@ -13,11 +13,14 @@ import {
     EstadoLanzamiento,
     Lanzamiento,
     LanzamientoPeticion,
+    MOTIVOS_SUSPENSION,
+    MotivoSuspension,
     ReservaPeticion,
 } from '../lanzamiento.model';
 import { extraerMensajeErrorApi } from '../lanzamientos.error-adapter';
 import { LanzamientosService } from '../lanzamientos.service';
 import { ReservaFormComponent } from '../reserva-form/reserva-form.component';
+import { esRolOperaciones, obtenerRolActual } from '../rol-operaciones';
 
 type EstadoCarga = 'idle' | 'loading' | 'success' | 'error';
 
@@ -91,12 +94,14 @@ type ModalCambioEstado = {
                     <button type="button" (click)="seleccionarDetalle(lanzamiento)">Detalle</button>
                     <button type="button" (click)="abrirFormularioEditar(lanzamiento)">Editar</button>
                     @for (estadoDestino of transicionesPara(lanzamiento.estado); track estadoDestino) {
-                      <button
-                        type="button"
-                        (click)="prepararCambioEstado(lanzamiento, estadoDestino)"
-                      >
-                        {{ estadoDestino }}
-                      </button>
+                      @if (estadoDestino !== 'Suspendido' || puedeSuspenderPorRol()) {
+                        <button
+                          type="button"
+                          (click)="prepararCambioEstado(lanzamiento, estadoDestino)"
+                        >
+                          {{ estadoDestino }}
+                        </button>
+                      }
                     }
                   </div>
                 </td>
@@ -165,8 +170,28 @@ type ModalCambioEstado = {
             El estado {{ modal.estadoDestino }} requiere motivo. Indica el motivo para continuar.
           </p>
 
-          <label for="motivo">Motivo</label>
-          <input #motivoInput id="motivo" type="text" [value]="motivoCambioEstado()" (input)="actualizarMotivo($event)" />
+          @if (modal.estadoDestino === 'Suspendido') {
+            <label for="motivo">Motivo</label>
+            <select id="motivo" [value]="motivoCambioEstado()" (change)="actualizarMotivo($event)" aria-required="true">
+              <option value="">-- Selecciona --</option>
+              @for (motivo of motivosSuspension; track motivo) {
+                <option [value]="motivo">{{ motivo }}</option>
+              }
+            </select>
+
+            <label for="comentario">Comentario (opcional)</label>
+            <input
+              #motivoInput
+              id="comentario"
+              type="text"
+              [value]="comentarioCambioEstado()"
+              (input)="actualizarComentario($event)"
+              placeholder="Contexto adicional"
+            />
+          } @else {
+            <label for="motivo">Motivo</label>
+            <input #motivoInput id="motivo" type="text" [value]="motivoCambioEstado()" (input)="actualizarMotivo($event)" />
+          }
 
           @if (errorModalCambioEstado()) {
             <p role="alert" class="inline-alert">{{ errorModalCambioEstado() }}</p>
@@ -186,14 +211,17 @@ export class LanzamientosComponent implements OnInit {
   private readonly motivoInputRef = viewChild<ElementRef<HTMLInputElement>>('motivoInput');
   private readonly servicio = inject(LanzamientosService);
 
+  protected readonly motivosSuspension = MOTIVOS_SUSPENSION;
   protected readonly estadoCarga = signal<EstadoCarga>('idle');
   protected readonly lanzamientos = signal<Lanzamiento[]>([]);
   protected readonly lanzamientoSeleccionado = signal<Lanzamiento | null>(null);
   protected readonly lanzamientoEnEdicion = signal<Lanzamiento | null>(null);
   protected readonly mostrarFormulario = signal(false);
   protected readonly mostrarFormularioReserva = signal(false);
+  protected readonly rolActual = signal(obtenerRolActual());
   protected readonly modalCambioEstado = signal<ModalCambioEstado | null>(null);
   protected readonly motivoCambioEstado = signal('');
+  protected readonly comentarioCambioEstado = signal('');
   protected readonly errorModalCambioEstado = signal<string | null>(null);
   protected readonly aviso = signal<Aviso | null>(null);
 
@@ -249,9 +277,15 @@ export class LanzamientosComponent implements OnInit {
   }
 
   protected prepararCambioEstado(lanzamiento: Lanzamiento, estadoDestino: EstadoLanzamiento): void {
+    if (estadoDestino === 'Suspendido' && !this.puedeSuspenderPorRol()) {
+      this.aviso.set({ texto: 'Solo operaciones puede suspender lanzamientos', esError: true });
+      return;
+    }
+
     if (requiereMotivo(estadoDestino)) {
       this.modalCambioEstado.set({ lanzamientoId: lanzamiento.id, estadoDestino });
       this.motivoCambioEstado.set('');
+      this.comentarioCambioEstado.set('');
       this.errorModalCambioEstado.set(null);
       queueMicrotask(() => this.motivoInputRef()?.nativeElement.focus());
       return;
@@ -264,12 +298,17 @@ export class LanzamientosComponent implements OnInit {
       return;
     }
 
-    this.ejecutarCambioEstado(lanzamiento.id, estadoDestino, null);
+    this.ejecutarCambioEstado(lanzamiento.id, estadoDestino, null, '');
   }
 
   protected actualizarMotivo(evento: Event): void {
-    const elemento = evento.target as HTMLInputElement | null;
+    const elemento = evento.target as HTMLInputElement | HTMLSelectElement | null;
     this.motivoCambioEstado.set(elemento?.value ?? '');
+  }
+
+  protected actualizarComentario(evento: Event): void {
+    const elemento = evento.target as HTMLInputElement | null;
+    this.comentarioCambioEstado.set(elemento?.value ?? '');
   }
 
   protected abrirFormularioReserva(): void {
@@ -320,13 +359,27 @@ export class LanzamientosComponent implements OnInit {
       return;
     }
 
-    this.ejecutarCambioEstado(modal.lanzamientoId, modal.estadoDestino, motivo);
+    const motivoFinal = modal.estadoDestino === 'Suspendido'
+      ? (motivo.toUpperCase() as MotivoSuspension)
+      : motivo;
+
+    this.ejecutarCambioEstado(
+      modal.lanzamientoId,
+      modal.estadoDestino,
+      motivoFinal,
+      this.comentarioCambioEstado().trim(),
+    );
   }
 
   protected cerrarModalCambioEstado(): void {
     this.modalCambioEstado.set(null);
     this.motivoCambioEstado.set('');
+    this.comentarioCambioEstado.set('');
     this.errorModalCambioEstado.set(null);
+  }
+
+  protected puedeSuspenderPorRol(): boolean {
+    return esRolOperaciones(this.rolActual());
   }
 
   protected formatearFecha(valor: string): string {
@@ -384,11 +437,13 @@ export class LanzamientosComponent implements OnInit {
     lanzamientoId: string,
     estadoDestino: EstadoLanzamiento,
     motivo: string | null,
+    comentario: string,
   ): void {
     this.servicio
       .cambiarEstado(lanzamientoId, {
         estado: estadoDestino,
         motivo: motivo ?? undefined,
+        comentario: comentario || undefined,
       })
       .subscribe({
         next: (actualizado) => {

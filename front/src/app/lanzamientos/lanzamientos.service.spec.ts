@@ -54,6 +54,7 @@ describe('LanzamientosService', () => {
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
+    localStorage.removeItem('astrobookings.rol');
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
@@ -114,6 +115,17 @@ describe('LanzamientosService', () => {
     const req = httpMock.expectOne('/api/lanzamientos/id-1/state');
     expect(req.request.method).toBe('POST');
     expect(req.request.body).toEqual(peticionEstadoEjemplo);
+    expect(req.request.headers.get('X-Rol')).toBe('OPERACIONES');
+    req.flush({ ...lanzamientoEjemplo, estado: 'Confirmado' });
+  });
+
+  it('cambiarEstado usa rol desde localStorage cuando existe', () => {
+    localStorage.setItem('astrobookings.rol', 'COMERCIAL');
+
+    servicio.cambiarEstado('id-1', peticionEstadoEjemplo).subscribe();
+
+    const req = httpMock.expectOne('/api/lanzamientos/id-1/state');
+    expect(req.request.headers.get('X-Rol')).toBe('COMERCIAL');
     req.flush({ ...lanzamientoEjemplo, estado: 'Confirmado' });
   });
 

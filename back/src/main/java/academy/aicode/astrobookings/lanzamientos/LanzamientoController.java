@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +25,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/lanzamientos")
 public class LanzamientoController {
+
+    private static final String ROL_OPERACIONES = "OPERACIONES";
 
     private final LanzamientoService servicio;
     private final ReservaService reservaService;
@@ -54,7 +57,15 @@ public class LanzamientoController {
     }
 
     @PostMapping("/{id}/state")
-    public Lanzamiento cambiarEstado(@PathVariable UUID id, @RequestBody CambioEstadoLanzamientoPeticion peticion) {
+    public Lanzamiento cambiarEstado(
+            @PathVariable UUID id,
+            @RequestBody CambioEstadoLanzamientoPeticion peticion,
+            @RequestHeader(value = "X-Rol", required = false) String rol) {
+        if (peticion != null
+                && peticion.estado() == EstadoLanzamiento.Suspendido
+                && !ROL_OPERACIONES.equalsIgnoreCase(normalizarRol(rol))) {
+            throw new LanzamientoAccesoDenegadoException("Solo operaciones puede suspender lanzamientos");
+        }
         return servicio.cambiarEstado(id, peticion);
     }
 
@@ -78,6 +89,11 @@ public class LanzamientoController {
         return respuestaError(HttpStatus.CONFLICT, "conflict", ex.getMessage());
     }
 
+    @ExceptionHandler(LanzamientoAccesoDenegadoException.class)
+    public ResponseEntity<ErrorRespuesta> manejarAccesoDenegado(LanzamientoAccesoDenegadoException ex) {
+        return respuestaError(HttpStatus.FORBIDDEN, "forbidden", ex.getMessage());
+    }
+
     @ExceptionHandler(ReservaValidacionException.class)
     public ResponseEntity<ErrorRespuesta> manejarReservaValidacion(ReservaValidacionException ex) {
         return respuestaError(HttpStatus.BAD_REQUEST, "validation_failed", ex.getMessage());
@@ -96,5 +112,9 @@ public class LanzamientoController {
     private ResponseEntity<ErrorRespuesta> respuestaError(HttpStatus status, String error, String mensaje) {
         return ResponseEntity.status(status)
                 .body(new ErrorRespuesta(String.valueOf(status.value()), error, mensaje));
+    }
+
+    private String normalizarRol(String rol) {
+        return rol == null ? "" : rol.trim();
     }
 }

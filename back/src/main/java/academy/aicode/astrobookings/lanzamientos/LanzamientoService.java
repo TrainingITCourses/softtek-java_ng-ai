@@ -57,7 +57,7 @@ public class LanzamientoService {
         validarMotivoParaIncidencia(peticion.estado(), peticion.motivo());
         validarTransicion(existente, peticion.estado());
 
-        String motivo = requiereMotivo(peticion.estado()) ? peticion.motivo().trim() : null;
+        String motivo = construirMotivoPersistido(peticion.estado(), peticion.motivo());
         return repositorio.guardar(existente.cambiarEstado(peticion.estado(), motivo));
     }
 
@@ -94,10 +94,32 @@ public class LanzamientoService {
         if (requiereMotivo(estadoDestino) && (motivo == null || motivo.isBlank())) {
             throw new LanzamientoValidacionException("El motivo es obligatorio para estados Suspendido y Cancelado");
         }
+        if (estadoDestino == EstadoLanzamiento.Suspendido && !esMotivoSuspendidoValido(motivo)) {
+            throw new LanzamientoValidacionException("Para suspender, el motivo debe ser CLIMA o TECNOLOGIA");
+        }
     }
 
     private boolean requiereMotivo(EstadoLanzamiento estadoDestino) {
         return estadoDestino == EstadoLanzamiento.Suspendido || estadoDestino == EstadoLanzamiento.Cancelado;
+    }
+
+    private String construirMotivoPersistido(EstadoLanzamiento estadoDestino, String motivo) {
+        if (!requiereMotivo(estadoDestino)) {
+            return null;
+        }
+        if (estadoDestino == EstadoLanzamiento.Suspendido) {
+            return normalizarMotivoSuspendido(motivo);
+        }
+        return motivo.trim();
+    }
+
+    private boolean esMotivoSuspendidoValido(String motivo) {
+        String valor = normalizarMotivoSuspendido(motivo);
+        return "CLIMA".equals(valor) || "TECNOLOGIA".equals(valor);
+    }
+
+    private String normalizarMotivoSuspendido(String motivo) {
+        return motivo == null ? "" : motivo.trim().toUpperCase();
     }
 
     private void validarTransicion(Lanzamiento lanzamiento, EstadoLanzamiento estadoDestino) {

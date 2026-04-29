@@ -73,12 +73,56 @@ class LanzamientoControllerIntegrationTest {
         String body = "{\"estado\":\"Suspendido\",\"motivo\":\" \"}";
 
         mockMvc.perform(post("/api/lanzamientos/{id}/state", lanzamientoId)
+                        .header("X-Rol", "OPERACIONES")
                         .contentType(APPLICATION_JSON)
                         .content(body))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("400"))
                 .andExpect(jsonPath("$.error").value("validation_failed"))
                 .andExpect(jsonPath("$.message").isNotEmpty());
+    }
+
+    @Test
+    void cambiar_estado_suspendido_con_motivo_fuera_catalogo_devuelve_error_estructurado() throws Exception {
+        String lanzamientoId = crearLanzamientoYDevolverId();
+        String body = "{\"estado\":\"Suspendido\",\"motivo\":\"INCIDENCIA\"}";
+
+        mockMvc.perform(post("/api/lanzamientos/{id}/state", lanzamientoId)
+                        .header("X-Rol", "OPERACIONES")
+                        .contentType(APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.error").value("validation_failed"))
+                .andExpect(jsonPath("$.message").isNotEmpty());
+    }
+
+    @Test
+    void cambiar_estado_suspendido_sin_rol_operaciones_devuelve_403() throws Exception {
+        String lanzamientoId = crearLanzamientoYDevolverId();
+        String body = "{\"estado\":\"Suspendido\",\"motivo\":\"CLIMA\"}";
+
+        mockMvc.perform(post("/api/lanzamientos/{id}/state", lanzamientoId)
+                        .header("X-Rol", "COMERCIAL")
+                        .contentType(APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("403"))
+                .andExpect(jsonPath("$.error").value("forbidden"));
+    }
+
+    @Test
+    void cambiar_estado_suspendido_con_rol_operaciones_y_motivo_catalogado_devuelve_ok() throws Exception {
+        String lanzamientoId = crearLanzamientoYDevolverId();
+        String body = "{\"estado\":\"Suspendido\",\"motivo\":\"TECNOLOGIA\"}";
+
+        mockMvc.perform(post("/api/lanzamientos/{id}/state", lanzamientoId)
+                        .header("X-Rol", "OPERACIONES")
+                        .contentType(APPLICATION_JSON)
+                        .content(body))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.estado").value("Suspendido"))
+                .andExpect(jsonPath("$.motivo").value("TECNOLOGIA"));
     }
 
     @Test

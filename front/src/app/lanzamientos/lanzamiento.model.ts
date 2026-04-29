@@ -5,6 +5,10 @@ export type EstadoLanzamiento =
   | 'Suspendido'
   | 'Cancelado';
 
+export type MotivoSuspension = 'CLIMA' | 'TECNOLOGIA';
+
+export const MOTIVOS_SUSPENSION: MotivoSuspension[] = ['CLIMA', 'TECNOLOGIA'];
+
 export const ESTADOS_LANZAMIENTO: EstadoLanzamiento[] = [
   'Programado',
   'Confirmado',
@@ -50,6 +54,7 @@ export interface LanzamientoPeticion {
 export interface CambioEstadoLanzamientoPeticion {
   estado: EstadoLanzamiento;
   motivo?: string;
+  comentario?: string;
 }
 
 export interface ErrorApi {

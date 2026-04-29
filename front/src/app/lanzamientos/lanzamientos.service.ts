@@ -8,6 +8,7 @@ import {
     Reserva,
     ReservaPeticion,
 } from './lanzamiento.model';
+import { obtenerRolActual } from './rol-operaciones';
 
 @Injectable({ providedIn: 'root' })
 export class LanzamientosService {
@@ -31,7 +32,9 @@ export class LanzamientosService {
   }
 
   cambiarEstado(id: string, peticion: CambioEstadoLanzamientoPeticion): Observable<Lanzamiento> {
-    return this.http.post<Lanzamiento>(`${this.base}/${id}/state`, peticion);
+    return this.http.post<Lanzamiento>(`${this.base}/${id}/state`, peticion, {
+      headers: { 'X-Rol': obtenerRolActual() },
+    });
   }
 
   crearReserva(id: string, peticion: ReservaPeticion): Observable<Reserva> {

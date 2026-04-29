@@ -68,6 +68,32 @@ class LanzamientoServiceTest {
     }
 
     @Test
+    void cambiar_estado_suspendido_con_motivo_fuera_catalogo_rechaza_operacion() {
+        Cohete cohete = crearCoheteActivo();
+        Lanzamiento lanzamiento = lanzamientoService.crear(peticionValida(cohete.id()));
+
+        assertThatThrownBy(() -> lanzamientoService.cambiarEstado(
+                lanzamiento.id(),
+                new CambioEstadoLanzamientoPeticion(EstadoLanzamiento.Suspendido, "OTRO")))
+                .isInstanceOf(LanzamientoValidacionException.class)
+                .hasMessageContaining("CLIMA")
+                .hasMessageContaining("TECNOLOGIA");
+    }
+
+    @Test
+    void cambiar_estado_suspendido_con_motivo_catalogado_normaliza_a_mayusculas() {
+        Cohete cohete = crearCoheteActivo();
+        Lanzamiento lanzamiento = lanzamientoService.crear(peticionValida(cohete.id()));
+
+        Lanzamiento suspendido = lanzamientoService.cambiarEstado(
+                lanzamiento.id(),
+                new CambioEstadoLanzamientoPeticion(EstadoLanzamiento.Suspendido, " clima "));
+
+        assertThat(suspendido.estado()).isEqualTo(EstadoLanzamiento.Suspendido);
+        assertThat(suspendido.motivo()).isEqualTo("CLIMA");
+    }
+
+    @Test
     void cambiar_estado_cancelado_lo_vuelve_terminal() {
         Cohete cohete = crearCoheteActivo();
         Lanzamiento lanzamiento = lanzamientoService.crear(peticionValida(cohete.id()));
@@ -89,7 +115,7 @@ class LanzamientoServiceTest {
 
         Lanzamiento suspendido = lanzamientoService.cambiarEstado(
                 lanzamiento.id(),
-                new CambioEstadoLanzamientoPeticion(EstadoLanzamiento.Suspendido, "Viento fuerte"));
+            new CambioEstadoLanzamientoPeticion(EstadoLanzamiento.Suspendido, "CLIMA"));
 
         Lanzamiento reprogramado = lanzamientoService.cambiarEstado(
                 suspendido.id(),
