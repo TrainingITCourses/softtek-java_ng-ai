@@ -2,7 +2,7 @@
 description: "Implementa una funcionalidad a partir de un plan, paso a paso, con enfoque simple y tests unitarios criticos (sin E2E)."
 name: "Implementa Plan"
 argument-hint: "Ruta del plan o resumen del plan a ejecutar"
-agent: "agent"
+agent: Programador Implementador
 ---
 
 Objetivo: ejecutar un plan de implementacion existente de forma incremental, priorizando simplicidad y mantenibilidad.

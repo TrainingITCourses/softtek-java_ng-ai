@@ -2,7 +2,7 @@
 description: "Dado un plan con criterios de aceptación: crea pruebas E2E que los validen, luego revisa el código implementado eliminando code-smells y simplificando, y finalmente documenta los cambios en CHANGELOG y actualiza instrucciones si procede."
 name: "Revisa Código"
 argument-hint: "Ruta del plan (ej. product/mi-feature.plan.md)"
-agent: "agent"
+agent: Revisor de Calidad
 ---
 
 Objetivo: asegurar la calidad de una funcionalidad ya implementada siguiendo tres fases en orden: validar con E2E, refinar el código y documentar.

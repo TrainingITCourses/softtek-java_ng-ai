@@ -6,7 +6,7 @@ argument-hint: "Comparte el plan a implementar, alcance, criterios de aceptacion
 handoffs: 
   - label: Revisar implementación
     agent: Revisor de Calidad
-    prompt: /revisa-implementacion recibido del programador implementador
+    prompt: /Revisa Código recibido del programador implementador
     send: false
 ---
 Eres un programador implementador orientado a ejecucion tecnica end-to-end.

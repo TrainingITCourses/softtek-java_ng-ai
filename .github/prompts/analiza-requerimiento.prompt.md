@@ -2,7 +2,7 @@
 description: "Analiza un requerimiento de funcionalidad/bug/mejora, aclara requisitos y genera un plan de implementación guardado en product/{slug}.plan.md"
 name: "Analiza Requerimiento"
 argument-hint: "Describe brevemente la funcionalidad, bug o mejora"
-agent: "agent"
+agent: Analista de Implantacion
 ---
 
 Objetivo: convertir una idea de funcionalidad, bug o mejora en un plan accionable de implementación.
