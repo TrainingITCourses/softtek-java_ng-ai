@@ -1,24 +1,24 @@
 import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-  OnInit,
-  output,
-  signal,
+    ChangeDetectionStrategy,
+    Component,
+    inject,
+    input,
+    OnInit,
+    output,
+    signal,
 } from '@angular/core';
+import {
+    AbstractControl,
+    FormBuilder,
+    ReactiveFormsModule,
+    ValidationErrors,
+    ValidatorFn,
+    Validators,
+} from '@angular/forms';
 import { Cohete } from '../../cohetes/cohete.model';
 import { CohetesService } from '../../cohetes/cohetes.service';
-import { extraerMensajeErrorApi } from '../lanzamientos.error-adapter';
 import { Lanzamiento, LanzamientoPeticion } from '../lanzamiento.model';
+import { extraerMensajeErrorApi } from '../lanzamientos.error-adapter';
 
 function validadorFechaIso(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -54,7 +54,7 @@ function validadorFechaIso(): ValidatorFn {
           }
         </select>
         @if (formulario.controls.coheteId.invalid && formulario.controls.coheteId.touched) {
-          <span role="alert">Debes seleccionar un cohete</span>
+          <span role="alert" class="inline-alert">Debes seleccionar un cohete</span>
         }
       </div>
 
@@ -68,7 +68,7 @@ function validadorFechaIso(): ValidatorFn {
           aria-required="true"
         />
         @if (formulario.controls.fecha.invalid && formulario.controls.fecha.touched) {
-          <span role="alert">La fecha debe ser ISO valida (ej: 2026-06-15T18:30:00Z)</span>
+          <span role="alert" class="inline-alert">La fecha debe ser ISO valida (ej: 2026-06-15T18:30:00Z)</span>
         }
       </div>
 
@@ -76,7 +76,7 @@ function validadorFechaIso(): ValidatorFn {
         <label for="precio">Precio</label>
         <input id="precio" formControlName="precio" type="number" min="0.01" step="0.01" aria-required="true" />
         @if (formulario.controls.precio.invalid && formulario.controls.precio.touched) {
-          <span role="alert">El precio debe ser mayor que 0</span>
+          <span role="alert" class="inline-alert">El precio debe ser mayor que 0</span>
         }
       </div>
 
@@ -84,10 +84,12 @@ function validadorFechaIso(): ValidatorFn {
         <p role="alert" class="error">{{ errorServidor() }}</p>
       }
 
-      <button type="submit" [disabled]="formulario.invalid">
-        {{ lanzamientoEditar() ? 'Guardar' : 'Crear' }}
-      </button>
-      <button type="button" (click)="cancelado.emit()">Cancelar</button>
+      <div class="actions-row">
+        <button type="submit" [disabled]="formulario.invalid">
+          {{ lanzamientoEditar() ? 'Guardar' : 'Crear' }}
+        </button>
+        <button type="button" (click)="cancelado.emit()">Cancelar</button>
+      </div>
     </form>
   `,
 })

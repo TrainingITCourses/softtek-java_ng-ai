@@ -1,1 +1,373 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;600;700&family=Orbitron:wght@500;700&display=swap');
+
+:root {
+	--bg-deep: #081120;
+	--bg-panel: #0f2137;
+	--bg-panel-soft: #132945;
+	--line: #28547c;
+	--line-soft: #214568;
+	--text-main: #eff6ff;
+	--text-muted: #9eb8d4;
+	--accent: #38bdf8;
+	--accent-soft: #7dd3fc;
+	--success: #22c55e;
+	--danger: #fb7185;
+	--warning: #f59e0b;
+	--radius: 14px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+html,
+body {
+	margin: 0;
+	min-height: 100%;
+}
+
+body {
+	color: var(--text-main);
+	background:
+		radial-gradient(circle at 16% 14%, #12345f55, transparent 38%),
+		radial-gradient(circle at 80% 12%, #0369a133, transparent 32%),
+		linear-gradient(180deg, #050b16 0%, #091325 46%, #070f1f 100%);
+	font-family: 'Exo 2', 'Segoe UI', sans-serif;
+}
+
+.space-backdrop {
+	position: fixed;
+	inset: 0;
+	background-image:
+		radial-gradient(circle at 24px 24px, #ffffff26 1px, transparent 0),
+		radial-gradient(circle at 60px 60px, #7dd3fc1a 1px, transparent 0);
+	background-size: 120px 120px;
+	opacity: 0.5;
+	pointer-events: none;
+	z-index: -1;
+}
+
+.app-shell {
+	width: min(1180px, 94vw);
+	margin: 1.5rem auto 2rem;
+	display: grid;
+	gap: 1rem;
+	animation: shell-enter 550ms ease-out;
+}
+
+.mission-panel {
+	background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-panel-soft) 100%);
+	border: 1px solid var(--line-soft);
+	border-radius: var(--radius);
+	box-shadow:
+		inset 0 1px 0 #ffffff12,
+		0 24px 38px -30px #000;
+}
+
+.command-header {
+	display: grid;
+	grid-template-columns: 1.5fr 1fr;
+	gap: 1rem;
+	align-items: center;
+	padding: 1.1rem 1.3rem;
+}
+
+.eyebrow {
+	margin: 0;
+	letter-spacing: 0.11em;
+	text-transform: uppercase;
+	color: var(--accent-soft);
+	font-size: 0.8rem;
+}
+
+h1,
+h2,
+h3,
+caption {
+	font-family: 'Orbitron', 'Segoe UI', sans-serif;
+}
+
+.command-header h1 {
+	margin: 0.2rem 0 0;
+	font-size: clamp(1.4rem, 2.1vw, 2rem);
+}
+
+.subtitle {
+	margin: 0.35rem 0 0;
+	color: var(--text-muted);
+}
+
+.status-cluster {
+	justify-self: end;
+	text-align: right;
+}
+
+.status-pill {
+	margin: 0;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0.35rem 0.7rem;
+	border-radius: 999px;
+	border: 1px solid #6b7280;
+	background: #111827;
+	font-weight: 600;
+	color: #d1d5db;
+}
+
+.status-pill::before {
+	content: '';
+	width: 0.48rem;
+	height: 0.48rem;
+	border-radius: 999px;
+	background: currentColor;
+}
+
+.status-pill.online {
+	border-color: #166534;
+	color: #86efac;
+	background: #052e16;
+}
+
+.status-time {
+	margin: 0.45rem 0 0;
+	font-size: 0.84rem;
+	color: var(--text-muted);
+}
+
+.main-nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	padding: 0.65rem;
+}
+
+.main-nav a {
+	text-decoration: none;
+	color: var(--text-main);
+	border: 1px solid var(--line);
+	border-radius: 10px;
+	padding: 0.55rem 0.8rem;
+	background: #0d2035;
+	font-weight: 600;
+	transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.main-nav a:hover {
+	transform: translateY(-1px);
+	border-color: var(--accent);
+}
+
+.main-nav a.active {
+	background: linear-gradient(180deg, #0a3a5a, #0d2743);
+	border-color: var(--accent);
+}
+
+.content-zone {
+	padding: 1rem;
+}
+
+.module-layout {
+	display: grid;
+	gap: 1rem;
+}
+
+.module-header {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: 0.75rem;
+}
+
+.module-header h2 {
+	margin: 0;
+}
+
+.module-note {
+	margin: 0;
+	color: var(--text-muted);
+}
+
+.panel-block {
+	background: #0a1b2f;
+	border: 1px solid var(--line-soft);
+	border-radius: 12px;
+	padding: 0.95rem;
+	overflow-x: auto;
+}
+
+form {
+	display: grid;
+	gap: 0.8rem;
+}
+
+label {
+	display: block;
+	margin-bottom: 0.3rem;
+	font-weight: 600;
+	color: #d5e8ff;
+}
+
+input,
+select {
+	width: 100%;
+	padding: 0.6rem 0.68rem;
+	border-radius: 10px;
+	border: 1px solid var(--line);
+	color: var(--text-main);
+	background: #071525;
+}
+
+input:focus,
+select:focus,
+button:focus-visible,
+a:focus-visible {
+	outline: 2px solid var(--accent);
+	outline-offset: 2px;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+	overflow: hidden;
+	border-radius: 12px;
+	border: 1px solid var(--line-soft);
+	background: #081a2d;
+}
+
+caption {
+	text-align: left;
+	padding: 0.8rem;
+	color: var(--accent-soft);
+}
+
+th,
+td {
+	padding: 0.62rem;
+	border-bottom: 1px solid #16324e;
+	vertical-align: top;
+}
+
+th {
+	text-align: left;
+	color: #cbe5ff;
+}
+
+td {
+	color: #deecff;
+	overflow-wrap: anywhere;
+}
+
+tr:last-child td {
+	border-bottom: 0;
+}
+
+button {
+	border: 1px solid #2b5e88;
+	background: #0b2741;
+	color: #e4f3ff;
+	border-radius: 10px;
+	padding: 0.5rem 0.72rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: transform 180ms ease, border-color 180ms ease;
+}
+
+button:hover:not(:disabled) {
+	transform: translateY(-1px);
+	border-color: var(--accent);
+}
+
+button:disabled {
+	opacity: 0.58;
+	cursor: not-allowed;
+}
+
+.actions-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.45rem;
+}
+
+[role='status'],
+[role='alert'] {
+	margin: 0;
+	padding: 0.65rem 0.75rem;
+	border-radius: 10px;
+}
+
+.exito,
+[role='status'] {
+	background: #052e1a;
+	border: 1px solid #166534;
+	color: #86efac;
+}
+
+.error,
+[role='alert'] {
+	background: #3f0a15;
+	border: 1px solid #9f1239;
+	color: #fecdd3;
+}
+
+.detail-grid {
+	display: grid;
+	gap: 0.45rem;
+}
+
+.detail-grid p {
+	margin: 0;
+}
+
+.inline-alert {
+	font-size: 0.9rem;
+}
+
+.dialog-card {
+	max-width: 550px;
+}
+
+@keyframes shell-enter {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (max-width: 880px) {
+	.command-header {
+		grid-template-columns: 1fr;
+	}
+
+	.status-cluster {
+		justify-self: start;
+		text-align: left;
+	}
+}
+
+@media (max-width: 620px) {
+	.app-shell {
+		width: min(96vw, 1180px);
+		margin-top: 1rem;
+	}
+
+	.content-zone {
+		padding: 0.8rem;
+	}
+
+	.main-nav a {
+		flex: 1 1 calc(50% - 0.5rem);
+		text-align: center;
+	}
+
+	th,
+	td {
+		font-size: 0.9rem;
+		padding: 0.5rem;
+	}
+}

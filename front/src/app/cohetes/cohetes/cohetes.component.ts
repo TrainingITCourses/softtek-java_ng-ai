@@ -17,51 +17,64 @@ type Aviso = { texto: string; esError: boolean };
   imports: [CoheteFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <main>
-      <h1>Cohetes</h1>
+    <section class="module-layout" aria-label="Modulo de cohetes">
+      <header class="module-header">
+        <div>
+          <h2>Cohetes</h2>
+          <p class="module-note">Gestion de flota activa y capacidad operativa.</p>
+        </div>
+
+        @if (!mostrarFormulario()) {
+          <button type="button" (click)="abrirFormularioCrear()">Añadir cohete</button>
+        }
+      </header>
 
       @if (aviso(); as a) {
         <p role="status" [class]="a.esError ? 'error' : 'exito'">{{ a.texto }}</p>
       }
 
       @if (mostrarFormulario()) {
-        <app-cohete-form
-          #formRef
-          [coheteEditar]="coheteSeleccionado()"
-          (guardado)="onGuardar($event)"
-          (cancelado)="cerrarFormulario()"
-        />
-      } @else {
-        <button type="button" (click)="abrirFormularioCrear()">Añadir cohete</button>
+        <div class="panel-block">
+          <app-cohete-form
+            #formRef
+            [coheteEditar]="coheteSeleccionado()"
+            (guardado)="onGuardar($event)"
+            (cancelado)="cerrarFormulario()"
+          />
+        </div>
       }
 
-      <table aria-label="Listado de cohetes">
-        <caption>Flota activa</caption>
-        <thead>
-          <tr>
-            <th scope="col">Nombre</th>
-            <th scope="col">Capacidad</th>
-            <th scope="col">Rango</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (cohete of cohetes(); track cohete.id) {
+      <div class="panel-block">
+        <table aria-label="Listado de cohetes">
+          <caption>Flota activa</caption>
+          <thead>
             <tr>
-              <td>{{ cohete.nombre }}</td>
-              <td>{{ cohete.capacidad }}</td>
-              <td>{{ cohete.rango }}</td>
-              <td>
-                <button type="button" (click)="abrirFormularioEditar(cohete)">Editar</button>
-                <button type="button" (click)="darDeBaja(cohete.id)">Dar de baja</button>
-              </td>
+              <th scope="col">Nombre</th>
+              <th scope="col">Capacidad</th>
+              <th scope="col">Rango</th>
+              <th scope="col">Acciones</th>
             </tr>
-          } @empty {
-            <tr><td colspan="4">No hay cohetes registrados</td></tr>
-          }
-        </tbody>
-      </table>
-    </main>
+          </thead>
+          <tbody>
+            @for (cohete of cohetes(); track cohete.id) {
+              <tr>
+                <td>{{ cohete.nombre }}</td>
+                <td>{{ cohete.capacidad }}</td>
+                <td>{{ cohete.rango }}</td>
+                <td>
+                  <div class="actions-row">
+                    <button type="button" (click)="abrirFormularioEditar(cohete)">Editar</button>
+                    <button type="button" (click)="darDeBaja(cohete.id)">Dar de baja</button>
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr><td colspan="4">No hay cohetes registrados</td></tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
   `,
 })
 export class CohetesComponent implements OnInit {

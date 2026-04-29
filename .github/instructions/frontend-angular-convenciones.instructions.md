@@ -53,3 +53,7 @@ Estas reglas reflejan el estilo y arquitectura ya usados en el proyecto. Prioriz
 - Mantener metodos pequenos y orientados a un caso de uso.
 - Evitar introducir librerias o patrones globales nuevos sin necesidad del repo.
 - Preservar idioma y terminologia del dominio ya existente.
+
+## 9) Responsive en vistas tabulares
+- Cuando una vista incluya tablas con identificadores largos o multiples acciones por fila, envolver el bloque contenedor con `overflow-x: auto` para evitar desbordes de pagina en movil.
+- Aplicar `overflow-wrap: anywhere` (u opcion equivalente) a celdas con contenido variable para reducir roturas de layout en anchos pequenos.

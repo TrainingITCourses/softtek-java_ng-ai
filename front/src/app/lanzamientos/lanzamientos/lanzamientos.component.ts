@@ -36,18 +36,27 @@ type ModalCambioEstado = {
   imports: [LanzamientoFormComponent, ReservaFormComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <main>
-      <h1>Lanzamientos</h1>
+    <section class="module-layout" aria-label="Modulo de lanzamientos" id="reservas">
+      <header class="module-header">
+        <div>
+          <h2>Lanzamientos</h2>
+          <p class="module-note">Control de operaciones, cambios de estado y reservas.</p>
+        </div>
+
+        @if (!mostrarFormulario()) {
+          <button type="button" (click)="abrirFormularioCrear()">Nuevo lanzamiento</button>
+        }
+      </header>
 
       @if (mostrarFormulario()) {
-        <app-lanzamiento-form
-          #formRef
-          [lanzamientoEditar]="lanzamientoEnEdicion()"
-          (guardado)="guardarLanzamiento($event)"
-          (cancelado)="cerrarFormulario()"
-        />
-      } @else {
-        <button type="button" (click)="abrirFormularioCrear()">Nuevo lanzamiento</button>
+        <div class="panel-block">
+          <app-lanzamiento-form
+            #formRef
+            [lanzamientoEditar]="lanzamientoEnEdicion()"
+            (guardado)="guardarLanzamiento($event)"
+            (cancelado)="cerrarFormulario()"
+          />
+        </div>
       }
 
       @if (estadoCarga() === 'loading') {
@@ -58,61 +67,67 @@ type ModalCambioEstado = {
         <p [attr.role]="a.esError ? 'alert' : 'status'" [class]="a.esError ? 'error' : 'exito'">{{ a.texto }}</p>
       }
 
-      <table aria-label="Listado de lanzamientos">
-        <caption>Operaciones activas</caption>
-        <thead>
-          <tr>
-            <th scope="col">Cohete</th>
-            <th scope="col">Fecha</th>
-            <th scope="col">Precio</th>
-            <th scope="col">Estado</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (lanzamiento of lanzamientos(); track lanzamiento.id) {
+      <div class="panel-block">
+        <table aria-label="Listado de lanzamientos">
+          <caption>Operaciones activas</caption>
+          <thead>
             <tr>
-              <td>{{ lanzamiento.coheteId }}</td>
-              <td>{{ formatearFecha(lanzamiento.fecha) }}</td>
-              <td>{{ formatearPrecio(lanzamiento.precio) }}</td>
-              <td>{{ lanzamiento.estado }}</td>
-              <td>
-                <button type="button" (click)="seleccionarDetalle(lanzamiento)">Detalle</button>
-                <button type="button" (click)="abrirFormularioEditar(lanzamiento)">Editar</button>
-                @for (estadoDestino of transicionesPara(lanzamiento.estado); track estadoDestino) {
-                  <button
-                    type="button"
-                    (click)="prepararCambioEstado(lanzamiento, estadoDestino)"
-                  >
-                    {{ estadoDestino }}
-                  </button>
-                }
-              </td>
+              <th scope="col">Cohete</th>
+              <th scope="col">Fecha</th>
+              <th scope="col">Precio</th>
+              <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
             </tr>
-          } @empty {
-            <tr>
-              <td colspan="5">No hay lanzamientos registrados</td>
-            </tr>
-          }
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            @for (lanzamiento of lanzamientos(); track lanzamiento.id) {
+              <tr>
+                <td>{{ lanzamiento.coheteId }}</td>
+                <td>{{ formatearFecha(lanzamiento.fecha) }}</td>
+                <td>{{ formatearPrecio(lanzamiento.precio) }}</td>
+                <td>{{ lanzamiento.estado }}</td>
+                <td>
+                  <div class="actions-row">
+                    <button type="button" (click)="seleccionarDetalle(lanzamiento)">Detalle</button>
+                    <button type="button" (click)="abrirFormularioEditar(lanzamiento)">Editar</button>
+                    @for (estadoDestino of transicionesPara(lanzamiento.estado); track estadoDestino) {
+                      <button
+                        type="button"
+                        (click)="prepararCambioEstado(lanzamiento, estadoDestino)"
+                      >
+                        {{ estadoDestino }}
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5">No hay lanzamientos registrados</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
 
       @if (lanzamientoSeleccionado(); as detalle) {
-        <section aria-label="Detalle de lanzamiento">
+        <section class="panel-block" aria-label="Detalle de lanzamiento">
           <h2>Detalle</h2>
-          <p><strong>ID:</strong> {{ detalle.id }}</p>
-          <p><strong>Cohete:</strong> {{ detalle.coheteId }}</p>
-          <p><strong>Fecha:</strong> {{ formatearFecha(detalle.fecha) }}</p>
-          <p><strong>Precio:</strong> {{ formatearPrecio(detalle.precio) }}</p>
-          <p><strong>Estado:</strong> {{ detalle.estado }}</p>
-          <p><strong>Capacidad total:</strong> {{ detalle.capacidadTotal }}</p>
-          <p><strong>Plazas disponibles:</strong> {{ detalle.plazasDisponibles }}</p>
-          @if (detalle.motivo) {
-            <p><strong>Motivo:</strong> {{ detalle.motivo }}</p>
-          } @else {
-            <p><strong>Motivo:</strong> Sin motivo</p>
-          }
-          <p><strong>Activo:</strong> {{ detalle.activo ? 'Si' : 'No' }}</p>
+          <div class="detail-grid">
+            <p><strong>ID:</strong> {{ detalle.id }}</p>
+            <p><strong>Cohete:</strong> {{ detalle.coheteId }}</p>
+            <p><strong>Fecha:</strong> {{ formatearFecha(detalle.fecha) }}</p>
+            <p><strong>Precio:</strong> {{ formatearPrecio(detalle.precio) }}</p>
+            <p><strong>Estado:</strong> {{ detalle.estado }}</p>
+            <p><strong>Capacidad total:</strong> {{ detalle.capacidadTotal }}</p>
+            <p><strong>Plazas disponibles:</strong> {{ detalle.plazasDisponibles }}</p>
+            @if (detalle.motivo) {
+              <p><strong>Motivo:</strong> {{ detalle.motivo }}</p>
+            } @else {
+              <p><strong>Motivo:</strong> Sin motivo</p>
+            }
+            <p><strong>Activo:</strong> {{ detalle.activo ? 'Si' : 'No' }}</p>
+          </div>
 
           @if (!mostrarFormularioReserva()) {
             <button
@@ -125,10 +140,12 @@ type ModalCambioEstado = {
           }
 
           @if (mostrarFormularioReserva()) {
-            <app-reserva-form
-              (guardado)="guardarReserva($event)"
-              (cancelado)="cerrarFormularioReserva()"
-            />
+            <div class="panel-block">
+              <app-reserva-form
+                (guardado)="guardarReserva($event)"
+                (cancelado)="cerrarFormularioReserva()"
+              />
+            </div>
           }
         </section>
       } @else {
@@ -137,6 +154,7 @@ type ModalCambioEstado = {
 
       @if (modalCambioEstado(); as modal) {
         <section
+          class="panel-block dialog-card"
           role="dialog"
           aria-modal="true"
           aria-labelledby="titulo-modal-cambio-estado"
@@ -151,14 +169,16 @@ type ModalCambioEstado = {
           <input #motivoInput id="motivo" type="text" [value]="motivoCambioEstado()" (input)="actualizarMotivo($event)" />
 
           @if (errorModalCambioEstado()) {
-            <p role="alert">{{ errorModalCambioEstado() }}</p>
+            <p role="alert" class="inline-alert">{{ errorModalCambioEstado() }}</p>
           }
 
-          <button type="button" (click)="confirmarCambioEstadoConMotivo()">Confirmar</button>
-          <button type="button" (click)="cerrarModalCambioEstado()">Cancelar</button>
+          <div class="actions-row">
+            <button type="button" (click)="confirmarCambioEstadoConMotivo()">Confirmar</button>
+            <button type="button" (click)="cerrarModalCambioEstado()">Cancelar</button>
+          </div>
         </section>
       }
-    </main>
+    </section>
   `,
 })
 export class LanzamientosComponent implements OnInit {

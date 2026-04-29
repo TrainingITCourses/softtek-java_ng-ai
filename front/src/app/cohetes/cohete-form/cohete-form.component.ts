@@ -22,7 +22,7 @@ import { Cohete, CohetePeticion, Rango, RANGOS } from '../cohete.model';
         <label for="nombre">Nombre</label>
         <input id="nombre" formControlName="nombre" type="text" aria-required="true" />
         @if (formulario.controls.nombre.invalid && formulario.controls.nombre.touched) {
-          <span role="alert">El nombre debe tener entre 3 y 10 caracteres</span>
+          <span role="alert" class="inline-alert">El nombre debe tener entre 3 y 10 caracteres</span>
         }
       </div>
 
@@ -30,7 +30,7 @@ import { Cohete, CohetePeticion, Rango, RANGOS } from '../cohete.model';
         <label for="capacidad">Capacidad</label>
         <input id="capacidad" formControlName="capacidad" type="number" min="1" max="9" aria-required="true" />
         @if (formulario.controls.capacidad.invalid && formulario.controls.capacidad.touched) {
-          <span role="alert">La capacidad debe estar entre 1 y 9</span>
+          <span role="alert" class="inline-alert">La capacidad debe estar entre 1 y 9</span>
         }
       </div>
 
@@ -43,7 +43,7 @@ import { Cohete, CohetePeticion, Rango, RANGOS } from '../cohete.model';
           }
         </select>
         @if (formulario.controls.rango.invalid && formulario.controls.rango.touched) {
-          <span role="alert">El rango es obligatorio</span>
+          <span role="alert" class="inline-alert">El rango es obligatorio</span>
         }
       </div>
 
@@ -51,10 +51,12 @@ import { Cohete, CohetePeticion, Rango, RANGOS } from '../cohete.model';
         <p role="alert" class="error">{{ errorServidor() }}</p>
       }
 
-      <button type="submit" [disabled]="formulario.invalid">
-        {{ coheteEditar() ? 'Guardar' : 'Crear' }}
-      </button>
-      <button type="button" (click)="cancelado.emit()">Cancelar</button>
+      <div class="actions-row">
+        <button type="submit" [disabled]="formulario.invalid">
+          {{ coheteEditar() ? 'Guardar' : 'Crear' }}
+        </button>
+        <button type="button" (click)="cancelado.emit()">Cancelar</button>
+      </div>
     </form>
   `,
 })
